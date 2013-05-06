@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="terrain" tilewidth="32" tileheight="32">
+  <image source="../tilesets/Atlas_0/terrain_atlas.png" trans="ffffff" width="1024" height="1024"/>
+  <terraintypes>
+   <terrain name="water" tile="-1">
+    <properties>
+     <property name="swimmable" value="true"/>
+     <property name="walkable" value="false"/>
+    </properties>
+   </terrain>
+   <terrain name="darkgrass" tile="-1"/>
+   <terrain name="dirt" tile="-1"/>
+   <terrain name="dirtroad" tile="-1"/>
+   <terrain name="soil" tile="-1">
+    <properties>
+     <property name="plantable" value="true"/>
+     <property name="walkable" value="true"/>
+    </properties>
+   </terrain>
+   <terrain name="sand" tile="-1">
+    <properties>
+     <property name="walkable" value="true"/>
+    </properties>
+   </terrain>
+   <terrain name="grass" tile="-1">
+    <properties>
+     <property name="walkable" value="true"/>
+    </properties>
+   </terrain>
+  </terraintypes>
+  <tile id="22" terrain="6,6,6,"/>
+  <tile id="23" terrain="6,6,,6"/>
+  <tile id="54" terrain="6,,6,6"/>
+  <tile id="55" terrain=",6,6,6"/>
+  <tile id="85" terrain=",,,6"/>
+  <tile id="86" terrain=",,6,6"/>
+  <tile id="87" terrain=",,6,"/>
+  <tile id="117" terrain=",6,,6"/>
+  <tile id="118" terrain="6,6,6,6"/>
+  <tile id="119" terrain="6,,6,"/>
+  <tile id="149" terrain=",6,,"/>
+  <tile id="150" terrain="6,6,,"/>
+  <tile id="151" terrain="6,,,"/>
+  <tile id="181" terrain="6,6,6,6"/>
+  <tile id="182" terrain="6,6,6,6"/>
+  <tile id="183" terrain="6,6,6,6"/>
+  <tile id="213" terrain="6,6,6,"/>
+  <tile id="214" terrain="6,6,,6"/>
+  <tile id="215" terrain="6,6,,6"/>
+  <tile id="245" terrain="6,,6,6"/>
+  <tile id="246" terrain=",6,6,6"/>
+  <tile id="247" terrain=",6,6,6"/>
+  <tile id="277" terrain=",,,6"/>
+  <tile id="278" terrain=",,6,6"/>
+  <tile id="279" terrain=",,6,"/>
+  <tile id="292" terrain="5,5,5,0"/>
+  <tile id="293" terrain="5,5,0,5"/>
+  <tile id="295" terrain="0,0,0,6"/>
+  <tile id="296" terrain="0,0,6,0"/>
+  <tile id="309" terrain=",6,,6"/>
+  <tile id="310" terrain="6,6,6,6"/>
+  <tile id="311" terrain="6,,6,"/>
+  <tile id="324" terrain="5,0,5,5"/>
+  <tile id="325" terrain="0,5,5,5"/>
+  <tile id="327" terrain="0,6,0,0"/>
+  <tile id="328" terrain="6,0,0,0"/>
+  <tile id="341" terrain=",6,,"/>
+  <tile id="342" terrain="6,6,,"/>
+  <tile id="343" terrain="6,,,"/>
+  <tile id="355" terrain="0,0,0,5"/>
+  <tile id="356" terrain="0,0,5,5"/>
+  <tile id="357" terrain="0,0,5,0"/>
+  <tile id="358" terrain="6,6,6,0"/>
+  <tile id="359" terrain="6,6,0,0"/>
+  <tile id="360" terrain="6,6,0,6"/>
+  <tile id="373" terrain="6,6,6,6"/>
+  <tile id="374" terrain="6,6,6,6"/>
+  <tile id="375" terrain="6,6,6,6"/>
+  <tile id="387" terrain="0,5,0,5"/>
+  <tile id="388" terrain="5,5,5,5"/>
+  <tile id="389" terrain="5,0,5,0"/>
+  <tile id="390" terrain="6,0,6,0"/>
+  <tile id="391">
+   <properties>
+    <property name="swimable" value="true"/>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="392" terrain="0,6,0,6"/>
+  <tile id="419" terrain="0,5,0,0"/>
+  <tile id="420" terrain="5,5,0,0"/>
+  <tile id="421" terrain="5,0,0,0"/>
+  <tile id="422" terrain="6,0,6,6"/>
+  <tile id="423" terrain="0,0,6,6"/>
+  <tile id="424" terrain="0,6,6,6"/>
+  <tile id="431">
+   <properties>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="432">
+   <properties>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="448" terrain="5,5,5,5"/>
+  <tile id="449" terrain="5,5,5,5"/>
+  <tile id="450" terrain="5,5,5,5"/>
+  <tile id="456" terrain="0,0,0,0">
+   <properties>
+    <property name="swimable" value="true"/>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="463">
+   <properties>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="464">
+   <properties>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="486" terrain="4,4,4,6"/>
+  <tile id="487" terrain="4,4,6,4"/>
+  <tile id="518" terrain="4,6,4,4"/>
+  <tile id="519" terrain="6,4,4,4"/>
+  <tile id="549" terrain="6,6,6,4"/>
+  <tile id="550" terrain="6,6,4,4"/>
+  <tile id="551" terrain="6,6,4,6"/>
+  <tile id="581" terrain="6,4,6,4"/>
+  <tile id="582" terrain="4,4,4,4"/>
+  <tile id="583" terrain="4,6,4,6"/>
+  <tile id="613" terrain="6,4,6,6"/>
+  <tile id="614" terrain="4,4,6,6"/>
+  <tile id="615" terrain="4,6,6,6"/>
+  <tile id="634">
+   <properties>
+    <property name="body" value="static"/>
+    <property name="res_type" value="wood"/>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="637">
+   <properties>
+    <property name="wood" value="true"/>
+   </properties>
+  </tile>
+  <tile id="646" terrain="4,4,4,4"/>
+  <tile id="647" terrain="4,4,4,4"/>
+  <tile id="648" terrain="2,2,2,2"/>
+  <tile id="649" terrain="2,2,2,2"/>
+  <tile id="650" terrain="2,2,2,2"/>
+  <tile id="651" terrain="2,2,2,2"/>
+  <tile id="652" terrain="2,2,2,2"/>
+  <tile id="680" terrain="2,2,2,3"/>
+  <tile id="681" terrain="2,2,3,3"/>
+  <tile id="682" terrain="2,2,3,2"/>
+  <tile id="683" terrain="3,3,3,2"/>
+  <tile id="684" terrain="3,3,2,3"/>
+  <tile id="712" terrain="2,3,2,3"/>
+  <tile id="713" terrain="3,3,3,3"/>
+  <tile id="714" terrain="3,2,3,2"/>
+  <tile id="715" terrain="3,2,3,3"/>
+  <tile id="716" terrain="2,3,3,3"/>
+  <tile id="744" terrain="2,3,2,2"/>
+  <tile id="745" terrain="3,3,2,2"/>
+  <tile id="746" terrain="3,2,2,2"/>
+  <tile id="775" terrain="1,1,1,"/>
+  <tile id="776" terrain="1,1,,1"/>
+  <tile id="807" terrain="1,,1,1"/>
+  <tile id="808" terrain=",1,1,1"/>
+  <tile id="838" terrain=",,,1"/>
+  <tile id="839" terrain=",,1,1"/>
+  <tile id="840" terrain=",,1,"/>
+  <tile id="870" terrain=",1,,1"/>
+  <tile id="871" terrain="1,1,1,1"/>
+  <tile id="872" terrain="1,,1,"/>
+  <tile id="902" terrain=",1,,"/>
+  <tile id="903" terrain="1,1,,"/>
+  <tile id="904" terrain="1,,,"/>
+  <tile id="934" terrain="1,1,1,1"/>
+  <tile id="935" terrain="1,1,1,1"/>
+  <tile id="936" terrain="1,1,1,1"/>
+  <tile id="939">
+   <properties>
+    <property name="harvestable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="941">
+   <properties>
+    <property name="harvestable" value="true"/>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="943">
+   <properties>
+    <property name="harvestable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1018">
+   <properties>
+    <property name="edible" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Terrain" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztmWFS2zAQRqVwlYaSE/gGkN6j08AFcA5QcLkHhfYCSa7QW1VL9FUbxSEOpDMZ5v1443hseWCfV6uV72IIdwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8F8YJ36+gfMT+Ns/GubiKXGR+HUAk8Qjbo7OfXbxO7EKIbTpuMjHJrFMv2/jmsYdnys330/gf/kImI8HF3dz0cRCmx20+fqLs7A+3ubrHT6O7sPia04WGYv5PJbckAflj9zZGHwc34fe9SaWHJGHVSixl4t5vn+W+IKPdzGOpQ4/ZR+qFcqTl3jn33KzzDliDq4z5uJPLLWdun64h6ccQzF18b2JaydyYMzcNTvvqvGeR5y8GntP7aEP76bOgWl1vgvmrm3uB8S+D/UhkzeOx0c/Q3Khz4X1IVY7uri/R9zljDlrm0NzQC60jn3O51rjqgdZ5vNVvmfixvvnkSPDfCjubdjssZUXrVvPak3le3PfByqP7Lm2RvN+8DHMh9Xkmxx39X0+5or7PDPT/bH0gupH2licyrH84GOYD73Lfg2r+Uh9oHnQvNTFsq6ye89HIXx2XIw23WnthY/hPqY5br5+q+9TbVCe6P2fZI+XKf4/HNNRyTHfl+Bjt4+61qqey4Wfq2q0h6L6Lh+d9xE3awk+XvdR11o7176I5qVdPizOvmZ4H1fORxuo50N8+G8bXdyco3zN8DVa6Pr4LIRPZ+sx8nGVnfj8WFLP9/p4iOX9Vm22uqx9XK1dtb/u99rb/NtcjLOPbyn+M8f1qIyzZ+Jjvw/NS5pP/HzlvzU1sayD5/ke5Ybh93Xr/ce6puNjvw/tzSpHlAv6jqG+RPOPPI1zfijWvr/Xs1jvDveh76t+PvE9heJo96pm+HdejnwvbvH3veCC9e5gHxa7Jm6+v3Uv8s9d7J+X+vbdVYfkDh/7ffjvGbWLuj8Z+n3Du9Yel3f9NXF5AjE4JYbEsy9HDh3X55rceJ+PY4OPbf4CrBOTOA==
+  </data>
+ </layer>
+ <layer name="background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt108uQ1EcBeDbGmstg4HWzBYYqH0gFoAVKE2EEVbgT1NhIezIEZGIPCLktU98X3Imd3TzO+++m1sKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPDRaauUs9asd8Gb+3TxoI+p2cqst5OdipnPZ62TdJNJcqeX2h1mxsPkqGLWy1nrJf3kMXnSR+2uMuPr5KZi1htZGySbeuAfWMx3vlTxrQ/a098Lpayli/WKPk700Si7+miUkT4A+IFV772ZO04Ho2Qvd/l+cvDFnT6eew31uU0X4+Q8PVwkl+3Pz8lQF7V7mX1V+BsmzsivdfIP6iYL3nuN0EsP/WRFH0BDfedNwfS8f1MANM0zpIkdNA==
+  </data>
+ </layer>
+ <layer name="foreground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2MEJgEAMBMAc9g/nU61ErURtxpQggtwJM7D/wL42EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/1BLxFhaXwEAAADwvalEzJnFL6QLa/awZXZ9dOHIHs7MpQ94rQ6tLwDgazZFX2yKvtgUADx1A/3kDt0=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="100" height="100">
+  <object name="player" type="Player" x="768" y="2880" width="32" height="32"/>
+  <object name="goomba" type="Enemy" x="416" y="2944" width="32" height="32"/>
+  <object type="tree" x="480" y="2816" width="32" height="32">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="collision" width="100" height="100"/>
+</map>

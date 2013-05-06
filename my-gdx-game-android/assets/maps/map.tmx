@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tiles-hd" tilewidth="32" tileheight="32">
+  <image source="../spritesheet/tiles-hd.png" width="64" height="128"/>
+  <terraintypes>
+   <terrain name="water" tile="-1"/>
+   <terrain name="grass" tile="-1"/>
+   <terrain name="sand" tile="-1"/>
+  </terraintypes>
+  <tile id="0">
+   <properties>
+    <property name="terrain" value="lava"/>
+   </properties>
+  </tile>
+  <tile id="1" terrain="2,2,2,2">
+   <properties>
+    <property name="terrain" value="sand"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="terrain" value="orange"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="terrain" value="pink"/>
+   </properties>
+  </tile>
+  <tile id="4" terrain="0,0,0,0">
+   <properties>
+    <property name="terrain" value="water"/>
+   </properties>
+  </tile>
+  <tile id="6" terrain="1,1,1,1">
+   <properties>
+    <property name="terrain" value="grass"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt18EOgjAQQEFCQvj/P/ai0RCkpbRuqXOYE5S0+8SEZZqmBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBiawd74N1Cj37o0dd89WjX4FPJ2uhzjGCvRe58r3TkXIuc+erx2xapOesR0+JqN+r0KG0Xfb67OTtTPfrqsbfm6DnR57ubWj1yrlGnS+690WcYSY0eurTvUXsN5T1aNKRdE/9Zeoxk+72QmnHNdqRneNTrzDOjz3V3Od9xfvfxfTSJp0U/clro01eP7f3Rex5VybugR3yPdWdN9N5HVPp+6NHO/PStxet69D7/yZywvd87EtMkek8AxHgAYpjF3A==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="100" height="100">
+  <object name="startPos" type="Player" x="704" y="2847" width="32" height="32"/>
+  <object name="goomba" type="Enemy" x="501" y="2793"/>
+  <object name="sword_of_doom" type="Item" x="463" y="2708">
+   <properties>
+    <property name="pickedUp" value="false"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
