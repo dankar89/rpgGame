@@ -177,7 +177,10 @@ public class TileMapManager {
 		
 		//return rectangle center
 //		return new Vector3(tmpRect.x + (tmpRect.width / 2) , tmpRect.y + (tmpRect.height / 2), 0);
-		return new Vector3(tmpRect.x , tmpRect.y, 0);
+		if(tmpRect != null)
+			return new Vector3(tmpRect.x , tmpRect.y, 0);
+		else
+			return Vector3.Zero;
 	}
 	
 	public OrthogonalTiledMapRenderer getMapRenderer()
