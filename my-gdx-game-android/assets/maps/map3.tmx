@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="terrain_atlas" tilewidth="32" tileheight="32" spacing="2" margin="2">
+  <image source="../tilesets/Atlas_0/terrain_atlas.png" trans="ffffff" width="2048" height="2048"/>
+  <terraintypes>
+   <terrain name="grass" tile="-1"/>
+   <terrain name="water" tile="-1"/>
+   <terrain name="sand" tile="-1"/>
+  </terraintypes>
+  <tile id="202" terrain="0,0,0,0"/>
+  <tile id="544" terrain="2,2,2,1"/>
+  <tile id="545" terrain="2,2,1,2"/>
+  <tile id="547" terrain="1,1,1,0"/>
+  <tile id="548" terrain="1,1,0,1"/>
+  <tile id="604" terrain="2,1,2,2"/>
+  <tile id="605" terrain="1,2,2,2"/>
+  <tile id="607" terrain="1,0,1,1"/>
+  <tile id="608" terrain="0,1,1,1"/>
+  <tile id="663" terrain="1,1,1,2"/>
+  <tile id="664" terrain="1,1,2,2"/>
+  <tile id="665" terrain="1,1,2,1"/>
+  <tile id="666" terrain="0,0,0,1"/>
+  <tile id="667" terrain="0,0,1,1"/>
+  <tile id="668" terrain="0,0,1,0"/>
+  <tile id="723" terrain="1,2,1,2"/>
+  <tile id="724" terrain="2,2,2,2"/>
+  <tile id="725" terrain="2,1,2,1"/>
+  <tile id="726" terrain="0,1,0,1"/>
+  <tile id="727" terrain="1,1,1,1"/>
+  <tile id="728" terrain="1,0,1,0"/>
+  <tile id="783" terrain="1,2,1,1"/>
+  <tile id="784" terrain="2,2,1,1"/>
+  <tile id="785" terrain="2,1,1,1"/>
+  <tile id="786" terrain="0,1,0,0"/>
+  <tile id="787" terrain="1,1,0,0"/>
+  <tile id="788" terrain="1,0,0,0"/>
+  <tile id="840" terrain="2,2,2,2"/>
+  <tile id="841" terrain="2,2,2,2"/>
+  <tile id="842" terrain="2,2,2,2"/>
+  <tile id="848" terrain="1,1,1,1"/>
+  <tile id="906" terrain=",,,0"/>
+  <tile id="907" terrain=",,0,"/>
+  <tile id="966" terrain=",0,,"/>
+  <tile id="967" terrain="0,,,"/>
+  <tile id="1025" terrain="0,0,0,"/>
+  <tile id="1026" terrain="0,0,,"/>
+  <tile id="1027" terrain="0,0,,0"/>
+  <tile id="1085" terrain="0,,0,"/>
+  <tile id="1087" terrain=",0,,0"/>
+  <tile id="1145" terrain="0,,0,0"/>
+  <tile id="1146" terrain=",,0,0"/>
+  <tile id="1147" terrain=",0,0,0"/>
+ </tileset>
+ <layer name="terrain" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt3eFNwzAQBtCoHQHYAAbqBmWulIkYIGIbUgkL1zhpnMRNUd+PJ6EiIZQvd3bqqnfYN80BAIC787prmuf9pbfd9v/Xo/rqr/1nc+lJLneVR9DJ4+aO/TX/GMhEHtsYqhF5yIO/Pavtfz713uWxaSYnOQAAAAAAAAAAAAAAAAAAAAAAAAAAAPBPhfkSZhds75zFy/53poRMtpV+T7vvZ5fHI8qtEXGvMgfntkIdxPf/2BwcudQT10HII1cbQ7nIpE4WIY9cFm0076ON5kycX5PJeuKe1P7M8cj1qS56Pe5VuT7HPHEdhCyG+tQ5g9zanvY55ovrINzzU9YM63sdY3Pr5lIny4ztaXNreTq/K2WOVLl4/uzUPe3Qc6E5tsuzmLtGTF1HZDLdUH/K9aQlmaiVZXnkepK1vb4ww3HtfZU8lpmyr1qitde6mzxkUa5m39Kn5qm197Xnnadmz5JJudwM8zX7V/wML5vpmcTvPdWqGWtKmfCe1th6ktZPST3Jo8y1usidHXYT6qnded+3xFBdpOfl4XqmeYydoXgOKZeen8dryTG5t3Pnu+nfkMU6eVy7frnPoYTfxXsC51LLpDVwLTf3/nq+AT8GsNg=
+  </data>
+ </layer>
+ <layer name="background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1LENwCAMBEAXzE+YCxgqZgM6iHInfW/p9Y4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+qpaIJ9PK6UtYevYwMlMfsMUPu4sfdpY93MUeAAAAvu8FND4Mcw==
+  </data>
+ </layer>
+ <layer name="foreground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1MEJgEAMBMBw1qLWpVavNmHu61vIITOw/0DYjQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+LezRVyZu1VfQjdPEUtmnaovodvyD3vm8I9h2bCx2LBa7z7YsFr6MBZ9AAAAgG891D8NSw==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="100" height="100">
+  <object name="player" type="Player" x="448" y="2912" width="32" height="32"/>
+ </objectgroup>
+</map>

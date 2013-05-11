@@ -249,7 +249,7 @@ public class MyGdxGame implements ApplicationListener {
 				new InternalFileHandleResolver()));
 
 		// queue stuff for loading
-		assetManager.load("maps/map2.tmx", TiledMap.class);
+		assetManager.load("maps/map3.tmx", TiledMap.class);
 
 		// player textures
 		assetManager.load(Player.TEST_TEXTURE_PATH, Texture.class);
@@ -260,7 +260,7 @@ public class MyGdxGame implements ApplicationListener {
 		assetManager.finishLoading();
 	}
 
-	private void setCameraPos(float x, float y) {		
+	private void setCameraPos(float x, float y) {	
 		if (x < minCamPos.x)
 			camera.position.x = minCamPos.x;
 		else if (x > maxCamPos.x)
@@ -274,5 +274,10 @@ public class MyGdxGame implements ApplicationListener {
 			camera.position.y = maxCamPos.y;
 		else
 			camera.position.y = y;
+		
+//		camera.unproject(camera.position);
+//		camera.position.x = Math.round(camera.position.x);
+//		camera.position.y = Math.round(camera.position.y);
+//		camera.project(camera.position);
 	}
 }

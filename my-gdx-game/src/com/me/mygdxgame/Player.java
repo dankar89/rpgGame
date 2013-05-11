@@ -218,8 +218,8 @@ public class Player extends Sprite {
 	}
 
 	public Vector3 getWorldPosition() {
-		worldPos.x = getX() / 32;
-		worldPos.y = getY() / 32;
+		worldPos.x = Math.round(getX()) / 32f;
+		worldPos.y = Math.round(getY()) / 32f;
 		return worldPos;
 	}	
 	

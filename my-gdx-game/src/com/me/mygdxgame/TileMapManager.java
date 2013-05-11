@@ -26,7 +26,7 @@ public class TileMapManager {
 	
 	public TileMapManager() {
 		//get map
-		map = MyGdxGame.assetManager.get("maps/map2.tmx");
+		map = MyGdxGame.assetManager.get("maps/map3.tmx");
 
 		baseTileLayer = (TiledMapTileLayer) map.getLayers().get(0);
 
