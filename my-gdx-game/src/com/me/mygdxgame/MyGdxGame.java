@@ -38,6 +38,7 @@ public class MyGdxGame implements ApplicationListener {
 	public static AssetManager assetManager;
 	private BitmapFont font;
 	private Vector2 maxCamPos, minCamPos;
+	private Rectangle worldBounds;
 	private int w, h;
 	private Player player;
 	private TileMapManager tileMapManager;
@@ -79,9 +80,13 @@ public class MyGdxGame implements ApplicationListener {
 		
 		worldBatch = tileMapManager.getMapRenderer().getSpriteBatch();
 		
+		
 		minCamPos = new Vector2(w / (tileMapManager.getTileSize() * 2), h / (tileMapManager.getTileSize() * 2));
 		maxCamPos = new Vector2(tileMapManager.getMapWidth() - minCamPos.x, tileMapManager.getMapHeight() - minCamPos.y);
-
+		
+		//remove maxCamPos and minCamPos!!!
+		worldBounds = new Rectangle(minCamPos.x, minCamPos.y, maxCamPos.x - minCamPos.x, maxCamPos.y - minCamPos.y);
+		
 		camera = new OrthographicCamera(
 				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
 				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
@@ -131,7 +136,7 @@ public class MyGdxGame implements ApplicationListener {
 						(int)player.getWorldPosition().y, 0);
 			 
 //			if(cell.getTile().getProperties().get("walkable") != "false")
-				player.update(camera, Gdx.graphics.getDeltaTime());
+			player.update(worldBounds, Gdx.graphics.getDeltaTime());
 			
 			setCameraPos(player.getWorldPosition().x, player.getWorldPosition().y);					
 
@@ -179,20 +184,6 @@ public class MyGdxGame implements ApplicationListener {
 						player.getBoundingRectangle().width / tileMapManager.getTileSize(), 
 						player.getBoundingRectangle().height / tileMapManager.getTileSize());								
 			
-				
-				//draw cells surrounding player				
-//				this.adjacentRects = tileMapManager.getAdjacentRects(
-//						((int)player.getWorldCenterPosition().x) - 1,
-//						((int)player.getWorldCenterPosition().y) - 1,
-//						((int)player.getWorldCenterPosition().x) + 1, 
-//						((int)player.getWorldCenterPosition().y) + 1,
-//						0);
-//				
-//				shapeRenderer.setColor(Color.PINK);
-//				for (Rectangle rect : this.adjacentRects) {
-//					shapeRenderer.rect(rect.x, rect.y, rect.width, rect.height);
-//				}
-//				
 				shapeRenderer.end();
 				
 				hudBatch.begin();
@@ -236,8 +227,9 @@ public class MyGdxGame implements ApplicationListener {
 		
 		if (Gdx.input.isTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {;
-				System.out.println("mousePos: " + Gdx.input.getX() + ":" + Gdx.input.getY());								
-				camera.translate(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
+				System.out.println("camPos: " + camera.position.x + ":" + camera.position.y);								
+//				camera.translate(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
+//			setCameraPos(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
 			}
 		}
 		

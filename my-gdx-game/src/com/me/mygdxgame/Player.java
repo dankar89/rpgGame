@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.Array;
 public class Player extends Sprite {	
 
 	private Vector3 worldPos = Vector3.Zero;
+	private Vector3 tmpPos = Vector3.Zero;
 	private Vector3 worldCenterPos = Vector3.Zero;
 	private Vector3 startPos = Vector3.Zero;
 	private float speed = 200.0f;
@@ -76,7 +77,7 @@ public class Player extends Sprite {
 		
 		this.scale = scale;		
 		
-		this.startPos = startPos;
+		this.startPos = startPos;		
 		
 		setOrigin(getWidth() / 2, getHeight() / 2);
 		
@@ -111,11 +112,11 @@ public class Player extends Sprite {
 		////////////////////
 	}
 	
-	public void update(OrthographicCamera camera, float deltaTime) {		
+	public void update(Rectangle worldBounds, float deltaTime) {		
 		stateTime += Gdx.graphics.getDeltaTime(); 
 
 		setCurrentAnimationFrame();
-		handleInput(camera);			
+		handleInput(worldBounds);			
 	}
 	
 	@Override
@@ -166,7 +167,9 @@ public class Player extends Sprite {
 	}
 	
 	
-	private void handleInput(OrthographicCamera camera) {
+	private void handleInput(Rectangle worldBounds) {
+		tmpPos.x = getX();
+		tmpPos.y = getY();
 		
 		if (Gdx.input.isKeyPressed(Keys.SPACE))
 			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
@@ -180,23 +183,27 @@ public class Player extends Sprite {
 			isStrafing = false;			
 		}
 		
-		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			setY(getY() + (Gdx.graphics.getDeltaTime() * speed));
+		if (Gdx.input.isKeyPressed(Keys.UP)) {		
+			tmpPos.y = getY() + (Gdx.graphics.getDeltaTime() * speed);
+//			setY(Math.round()));
 			
 			if(!isStrafing)
 				state = State.WalkingUp;
 		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			setY(getY() - (Gdx.graphics.getDeltaTime() * speed));
+			tmpPos.y = getY() - (Gdx.graphics.getDeltaTime() * speed);
+//			setY(Math.round(getY() - (Gdx.graphics.getDeltaTime() * speed)));
 			
 			if(!isStrafing)
 				state = State.WalkingDown;
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			setX(getX() - (Gdx.graphics.getDeltaTime() * speed));
+			tmpPos.x = getX() - (Gdx.graphics.getDeltaTime() * speed);
+//			setX(Math.round(getX() - (Gdx.graphics.getDeltaTime() * speed)));
 			
 			if(!isStrafing)
 				state = State.WalkingLeft;
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			setX(getX() + (Gdx.graphics.getDeltaTime() * speed));
+			tmpPos.x = getX() + (Gdx.graphics.getDeltaTime() * speed);
+//			setX(Math.round(getX() + (Gdx.graphics.getDeltaTime() * speed)));
 			
 			if(!isStrafing)
 				state = State.WalkingRight;
@@ -207,30 +214,51 @@ public class Player extends Sprite {
 				state = State.Standing;
 		}
 
-		
-
-
 		if (Gdx.input.isTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-				System.out.println(Math.round(getX()) + ":" + Math.round(getY()));
+				System.out.println(getX() + ":" + getY());
+//				System.out.println("cam " + Math.round(getX()) / 32f + ":" + Math.round(getY()) / 32f);
+				tmpPos.x = Math.round(getX() + -Gdx.input.getDeltaX());
+				tmpPos.y = Math.round(getY() + Gdx.input.getDeltaY());
 			}
 		}
+		
+		setX(tmpPos.x);
+		setY(tmpPos.y);
+//		if(tmpPos.x < (worldBounds.x + worldBounds.width))
+//			setX(tmpPos.x);
+//		else
+//			tmpPos.x = worldBounds.x + worldBounds.width;
+//		if(tmpPos.x > worldBounds.x)
+//			setX(tmpPos.x);
+//		else
+//			tmpPos.x = worldBounds.x;
+//		
+//		
+//		if(tmpPos.y < (worldBounds.y * 32 + worldBounds.height * 32))
+//			setY(tmpPos.y);
+//		else
+//			tmpPos.y = (worldBounds.y * 32 + worldBounds.height * 32);
+//		if(tmpPos.y > worldBounds.y * 32)
+//			setY(tmpPos.y);
+//		else
+//			tmpPos.y = worldBounds.y * 32;
 	}
 
 	public Vector3 getWorldPosition() {
-		worldPos.x = getX() / 32;
-		worldPos.y = getY() / 32;
+//		worldPos.x =  Math.round(getX()) / 32f;
+//		worldPos.y =  Math.round(getY()) / 32f;
+		worldPos.x =  getX() / 32;
+		worldPos.y =  getY() / 32;
 		return worldPos;
 	}	
 	
-
 	public Vector3 getWorldCenterPosition() {
-		worldCenterPos.x = (getX() + getOriginX()) / 32;
-		worldCenterPos.y = (getY() + getOriginY()) / 32;
+		worldCenterPos.x = Math.round(getX() + getOriginX()) / 32;
+		worldCenterPos.y = Math.round(getY() + getOriginY()) / 32;
 		return worldCenterPos;
 	}
 		
-	
 	public Vector3 getStartPos()
 	{
 		return this.startPos;
