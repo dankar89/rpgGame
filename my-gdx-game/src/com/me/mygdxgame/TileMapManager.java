@@ -30,7 +30,7 @@ public class TileMapManager {
 
 		baseTileLayer = (TiledMapTileLayer) map.getLayers().get(0);
 
-		unitScale = 1f / (float) getTileSize();
+		unitScale = 1 / (float) getTileSize();
 		mapRenderer = new OrthogonalTiledMapRenderer(map, unitScale);
 	}
 	
