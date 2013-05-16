@@ -42,6 +42,7 @@ public class MyGdxGame implements ApplicationListener {
 	private int w, h;
 	private Player player;
 	private TileMapManager tileMapManager;
+	private Box2dWorldManager worldManager;
 	private ShapeRenderer shapeRenderer;
 	private boolean debug = true;
 	private Input prevInput;
@@ -94,25 +95,30 @@ public class MyGdxGame implements ApplicationListener {
 		camera.update();		
 		
 		//TEST
-		world = new World(new Vector2(0, -5), true);		
-		debugRenderer = new Box2DDebugRenderer();
+		worldManager = new Box2dWorldManager();
+//		world = new World(new Vector2(0, -5), true);		
+//		debugRenderer = new Box2DDebugRenderer();
 		
-		treeBodyDef = new BodyDef();	
-		treeBody = world.createBody(treeBodyDef);
-		treeBodyDef.position.set(new Vector2(0,5));
-		
-		treeShape = new PolygonShape();
-		// Set the polygon shape as a box which is twice the size of our view port and 20 high
-		// (setAsBox takes half-width and half-height as arguments)
-		treeShape.setAsBox(camera.viewportWidth, 4.0f);
-		// Create a fixture from our polygon shape and add it to our ground body  
-		treeBody.createFixture(treeShape, 0.0f); 
-		// Clean up after ourselves
-		treeShape.dispose();
+//		treeBodyDef = new BodyDef();	
+//		treeBody = world.createBody(treeBodyDef);
+//		treeBodyDef.position.set(new Vector2(0,5));
+//		
+//		treeShape = new PolygonShape();
+//		// Set the polygon shape as a box which is twice the size of our view port and 20 high
+//		// (setAsBox takes half-width and half-height as arguments)
+//		treeShape.setAsBox(camera.viewportWidth, 4.0f);
+//		// Create a fixture from our polygon shape and add it to our ground body  
+//		treeBody.createFixture(treeShape, 0.0f); 
+//		// Clean up after ourselves
+//		treeShape.dispose();
 		//
 		
 		
 		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), world);
+		
+		//Create the bodies
+		String[] props = {"shape"};
+		worldManager.createBodies(tileMapManager.getTilesWithProperties(props, 0, 0, 0, w / 32, h / 32));
 	}
 
 	@Override
@@ -122,6 +128,7 @@ public class MyGdxGame implements ApplicationListener {
 		assetManager.dispose();		
 		shapeRenderer.dispose();
 		player.dispose();
+		worldManager.destroyBodies();
 	}
 
 	@Override
@@ -132,8 +139,8 @@ public class MyGdxGame implements ApplicationListener {
 		if (assetManager.update()) {
 			 handleInput();	
 
-			Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
-						(int)player.getWorldPosition().y, 0);
+//			Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
+//						(int)player.getWorldPosition().y, 0);
 			 
 //			if(cell.getTile().getProperties().get("walkable") != "false")
 			player.update(worldBounds, Gdx.graphics.getDeltaTime());
@@ -155,7 +162,7 @@ public class MyGdxGame implements ApplicationListener {
 			{
 //				Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
 //						(int)player.getWorldPosition().y, 0);
-				MapProperties props = cell.getTile().getProperties();
+//				MapProperties props = cell.getTile().getProperties();
 //				
 //				if(props.get("swimmable") != null)
 //				{
@@ -190,10 +197,12 @@ public class MyGdxGame implements ApplicationListener {
 				font.draw(hudBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 40);
 				hudBatch.end();
 				
-				debugRenderer.render(world, camera.combined);
+//				debugRenderer.render(world, camera.combined);
+				worldManager.renderDebug(camera.combined);
 			}
 			
-			world.step(1/60f,6, 2);
+//			world.step(1/60f,6, 2);
+			worldManager.update(1/60f);
 		}
 	}
 
@@ -241,7 +250,7 @@ public class MyGdxGame implements ApplicationListener {
 				new InternalFileHandleResolver()));
 
 		// queue stuff for loading
-		assetManager.load("maps/map3.tmx", TiledMap.class);
+		assetManager.load("maps/map2.tmx", TiledMap.class);
 
 		// player textures
 		assetManager.load(Player.TEST_TEXTURE_PATH, Texture.class);

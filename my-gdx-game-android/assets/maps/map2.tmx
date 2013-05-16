@@ -25,6 +25,7 @@
    </terrain>
    <terrain name="grass" tile="-1">
     <properties>
+     <property name="name" value="grass"/>
      <property name="walkable" value="true"/>
     </properties>
    </terrain>
@@ -140,6 +141,7 @@
    <properties>
     <property name="body" value="static"/>
     <property name="res_type" value="wood"/>
+    <property name="shape" value="circle"/>
     <property name="walkable" value="false"/>
    </properties>
   </tile>
@@ -206,7 +208,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Terrain" width="100" height="100">
+ <layer name="terrain" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJztmWFS2zAQRqVwlYaSE/gGkN6j08AFcA5QcLkHhfYCSa7QW1VL9FUbxSEOpDMZ5v1443hseWCfV6uV72IIdwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8F8YJ36+gfMT+Ns/GubiKXGR+HUAk8Qjbo7OfXbxO7EKIbTpuMjHJrFMv2/jmsYdnys330/gf/kImI8HF3dz0cRCmx20+fqLs7A+3ubrHT6O7sPia04WGYv5PJbckAflj9zZGHwc34fe9SaWHJGHVSixl4t5vn+W+IKPdzGOpQ4/ZR+qFcqTl3jn33KzzDliDq4z5uJPLLWdun64h6ccQzF18b2JaydyYMzcNTvvqvGeR5y8GntP7aEP76bOgWl1vgvmrm3uB8S+D/UhkzeOx0c/Q3Khz4X1IVY7uri/R9zljDlrm0NzQC60jn3O51rjqgdZ5vNVvmfixvvnkSPDfCjubdjssZUXrVvPak3le3PfByqP7Lm2RvN+8DHMh9Xkmxx39X0+5or7PDPT/bH0gupH2licyrH84GOYD73Lfg2r+Uh9oHnQvNTFsq6ye89HIXx2XIw23WnthY/hPqY5br5+q+9TbVCe6P2fZI+XKf4/HNNRyTHfl+Bjt4+61qqey4Wfq2q0h6L6Lh+d9xE3awk+XvdR11o7176I5qVdPizOvmZ4H1fORxuo50N8+G8bXdyco3zN8DVa6Pr4LIRPZ+sx8nGVnfj8WFLP9/p4iOX9Vm22uqx9XK1dtb/u99rb/NtcjLOPbyn+M8f1qIyzZ+Jjvw/NS5pP/HzlvzU1sayD5/ke5Ybh93Xr/ce6puNjvw/tzSpHlAv6jqG+RPOPPI1zfijWvr/Xs1jvDveh76t+PvE9heJo96pm+HdejnwvbvH3veCC9e5gHxa7Jm6+v3Uv8s9d7J+X+vbdVYfkDh/7ffjvGbWLuj8Z+n3Du9Yel3f9NXF5AjE4JYbEsy9HDh3X55rceJ+PY4OPbf4CrBOTOA==
   </data>
@@ -224,9 +226,6 @@
  <objectgroup name="Object Layer 1" width="100" height="100">
   <object name="player" type="Player" x="768" y="2880" width="32" height="32"/>
   <object name="goomba" type="Enemy" x="416" y="2944" width="32" height="32"/>
-  <object type="tree" x="480" y="2816" width="32" height="32">
-   <ellipse/>
-  </object>
  </objectgroup>
  <objectgroup name="collision" width="100" height="100"/>
 </map>

@@ -3,8 +3,10 @@ package com.me.mygdxgame;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -12,26 +14,39 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.Shape.Type;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class TileMapManager {
 	private TiledMap map;
+	private World world;
+	private Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer mapRenderer;
-	private TiledMapTileLayer baseTileLayer;
+	private TiledMapTileLayer terrainLayer;
 	private int[] backgroundLayers = { 0, 1 };
 	private int[] foregroundLayers = { 2 };
 	private float unitScale;
+	private Box2dWorldManager collisionManager;
 	
 	private ArrayList<Rectangle> adjacentCells = new ArrayList<Rectangle>();
+	private ArrayList<Box2dMapObjectData> filteredDataObjects = new ArrayList<Box2dMapObjectData>();
 	
 	public TileMapManager() {
 		//get map
-		map = MyGdxGame.assetManager.get("maps/map3.tmx");
+		map = MyGdxGame.assetManager.get("maps/map2.tmx");
 
-		baseTileLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		terrainLayer = (TiledMapTileLayer) map.getLayers().get("terrain");
 
 		unitScale = 1 / (float) getTileSize();
 		mapRenderer = new OrthogonalTiledMapRenderer(map, unitScale);
+		
+		collisionManager = new Box2dWorldManager();
+
 	}
 	
 	public void renderBgLayers(OrthographicCamera cam)
@@ -88,6 +103,51 @@ public class TileMapManager {
 		return null;
 	}
 	
+	
+	public ArrayList<Box2dMapObjectData> getTilesWithProperties(String[] props, int layerIndex, int startX, int startY, int endX, int endY)
+	{
+		filteredDataObjects.clear();
+		TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(layerIndex);
+		TiledMapTile tile = null;
+		MapProperties tileProps;
+		BodyType bType = BodyType.StaticBody;
+		Shape.Type sType = Shape.Type.Circle;
+		
+		
+		if(layer.getCell(startX, startY) != null)
+		{
+			
+			for(int y = startY; y <= endY; y++)
+			{
+				for(int x = startX; x <= endX; x++)
+				{
+					tileProps = layer.getCell(x, y).getTile().getProperties();
+					for (String prop : props) {
+						if(tileProps.containsKey(prop))						
+						{
+							//if it has a shape property, we know it should be made into a box2d body
+							if(prop == "shape")
+							{
+								if(tileProps.get(prop) == "circle")	
+									sType = Type.Circle;
+								else if(tileProps.get(prop) == "box")	
+									sType = Type.Polygon;
+								
+								if(tileProps.get("body") == "static")	
+									bType = BodyType.StaticBody;
+							}													
+								
+							filteredDataObjects.add(new Box2dMapObjectData(sType, bType, new Vector2(x, y)));
+						}
+					}
+				}
+			}
+		}
+		
+		return filteredDataObjects;
+		
+	}
+	
 	public ArrayList<Rectangle> getAdjacentRects(int startX, int startY, int endX, int endY, int layerIndex)
 	{
 		adjacentCells.clear();
@@ -109,31 +169,6 @@ public class TileMapManager {
 					
 				}	
 			}
-			
-//			//get upper-left cell
-//			if( != null)
-//				adjacentCells.add(layer.getCell(startX-1, startY-1));
-//			//get upper cell
-//			if(layer.getCell(startX, startY-1) != null)
-//				adjacentCells.add(layer.getCell(startX, startY-1));
-//			//get upper-right cell
-//			if(layer.getCell(startX+1, startY-1) != null)
-//				adjacentCells.add(layer.getCell(startX+1, startY-1));
-//			//get left cell
-//			if(layer.getCell(startX-1, startY) != null)
-//				adjacentCells.add(layer.getCell(startX-1, startY));
-//			//get right cell
-//			if(layer.getCell(startX+1, startY) != null)
-//				adjacentCells.add(layer.getCell(startX+1, startY));
-//			//get lower-left cell
-//			if(layer.getCell(startX-1, startY+1) != null)
-//				adjacentCells.add(layer.getCell(startX-1, startY+1));
-//			//get lower cell
-//			if(layer.getCell(startX, startY+1) != null)
-//				adjacentCells.add(layer.getCell(startX, startY+1));
-//			//get lower-right cell
-//			if(layer.getCell(startX+1, startY+1) != null)
-//				adjacentCells.add(layer.getCell(startX+1, startY+1));			
 		}
 		
 		return adjacentCells;
@@ -152,23 +187,23 @@ public class TileMapManager {
 	}		
 
 	public int getMapWidth() {
-		return baseTileLayer.getWidth();
+		return terrainLayer.getWidth();
 	}
 
 	public int getMapHeight() {
-		return baseTileLayer.getHeight();
+		return terrainLayer.getHeight();
 	}
 
 	public int getTileSize() {
-		return (int) baseTileLayer.getTileWidth();
+		return (int) terrainLayer.getTileWidth();
 	}
 
 	public TiledMapTileLayer getBaseMapLayer() {
-		return baseTileLayer;
+		return terrainLayer;
 	}
 
 	public void setBaseMapLayer(TiledMapTileLayer baseMapLayer) {
-		this.baseTileLayer = baseMapLayer;
+		this.terrainLayer = baseMapLayer;
 	}
 	
 	public Vector3 getPlayerStartPos()

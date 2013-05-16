@@ -85,31 +85,31 @@ public class Player extends Sprite {
 		this.setBounds(startPos.x, startPos.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());	
 		
 		
-		///BOX2d TEST STUFF
-		bodyDef = new BodyDef();
-		// We set our body to dynamic, for something like ground which doesnt move we would set it to StaticBody
-		bodyDef.type = BodyType.DynamicBody;
-		// Set our body's starting position in the world
-		bodyDef.position.set(getWorldPosition().x, getWorldPosition().y);
-		
-		
-		// Create our body in the world using our body definition
-		body = world.createBody(bodyDef);
-
-		// Create a circle shape and set its radius to 6
-		circle = new CircleShape();
-		circle.setRadius((getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
-
-		// Create a fixture definition to apply our shape to
-		fixtureDef = new FixtureDef();
-		fixtureDef.shape = circle;
-		fixtureDef.density = 0.5f; 
-		fixtureDef.friction = 0.4f;
-		fixtureDef.restitution = 0.6f; // Make it bounce a little bit
-
-		// Create our fixture and attach it to the body
-		fixture = body.createFixture(fixtureDef);
-		////////////////////
+//		///BOX2d TEST STUFF
+//		bodyDef = new BodyDef();
+//		// We set our body to dynamic, for something like ground which doesnt move we would set it to StaticBody
+//		bodyDef.type = BodyType.DynamicBody;
+//		// Set our body's starting position in the world
+//		bodyDef.position.set(getWorldPosition().x, getWorldPosition().y);
+//		
+//		
+//		// Create our body in the world using our body definition
+//		body = world.createBody(bodyDef);
+//
+//		// Create a circle shape and set its radius to 6
+//		circle = new CircleShape();
+//		circle.setRadius((getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
+//
+//		// Create a fixture definition to apply our shape to
+//		fixtureDef = new FixtureDef();
+//		fixtureDef.shape = circle;
+//		fixtureDef.density = 0.5f; 
+//		fixtureDef.friction = 0.4f;
+//		fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+//
+//		// Create our fixture and attach it to the body
+//		fixture = body.createFixture(fixtureDef);
+//		////////////////////
 	}
 	
 	public void update(Rectangle worldBounds, float deltaTime) {		
@@ -126,7 +126,7 @@ public class Player extends Sprite {
 	
 	public void dispose()
 	{
-		circle.dispose();
+//		circle.dispose();
 	}
 	
 	private void setCurrentAnimationFrame()
@@ -246,15 +246,10 @@ public class Player extends Sprite {
 	}
 
 	public Vector3 getWorldPosition() {
-<<<<<<< HEAD
-		worldPos.x = Math.round(getX()) / 32f;
-		worldPos.y = Math.round(getY()) / 32f;
-=======
 //		worldPos.x =  Math.round(getX()) / 32f;
 //		worldPos.y =  Math.round(getY()) / 32f;
 		worldPos.x =  getX() / 32;
 		worldPos.y =  getY() / 32;
->>>>>>> 01c24669c5f5cabb2d390a84f8ddade90906c64b
 		return worldPos;
 	}	
 	
