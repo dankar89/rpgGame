@@ -1,0 +1,16 @@
+package com.me.mygdxgame;
+
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
+
+public class Box2dMapObjectData {
+	public ShapeType shapeType;
+	public Vector2 pos;
+	
+	
+	public Box2dMapObjectData(ShapeType shapeType, Vector2 pos)
+	{
+		this.shapeType = shapeType;
+		this.pos = pos;
+	}
+}

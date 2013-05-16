@@ -1,0 +1,18 @@
+//package com.me.mygdxgame;
+//
+//import com.badlogic.gdx.physics.box2d.World;
+//
+//public class MapCollisionManager {
+//
+//	private World world;
+//	
+//	public MapCollisionManager(World world, )
+//	{
+//		this.world = world;
+//	}
+//	
+//	public createBodies()
+//	{
+//		
+//	}
+//}

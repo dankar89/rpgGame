@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;com.me.mygdxgame.MapCollisionManager&apos; to &apos;Box2dWorldManager&apos;&#x0D;&#x0A;- Original project: &apos;my-gdx-game&apos;&#x0D;&#x0A;- Original element: &apos;com.me.mygdxgame.MapCollisionManager&apos;&#x0D;&#x0A;- Renamed element: &apos;com.me.mygdxgame.Box2dWorldManager&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;MapCollisionManager&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;com.me.mygdxgame{MapCollisionManager.java[MapCollisionManager" matchStrategy="1" name="Box2dWorldManager" qualified="false" references="true" similarDeclarations="false" stamp="1368554898915" textual="false" version="1.0"/>
+</session>

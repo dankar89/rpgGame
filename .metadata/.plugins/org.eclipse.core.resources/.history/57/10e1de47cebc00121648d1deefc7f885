@@ -1,0 +1,282 @@
+package com.me.mygdxgame;
+
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+
+public class MyGdxGame implements ApplicationListener {
+	private OrthographicCamera camera;
+	private SpriteBatch worldBatch;
+	private SpriteBatch hudBatch;
+	public static AssetManager assetManager;
+	private BitmapFont font;
+	private Vector2 maxCamPos, minCamPos;
+	private Rectangle worldBounds;
+	private int w, h;
+	private Player player;
+	private TileMapManager tileMapManager;
+	private Box2dWorldManager worldManager;
+	private ShapeRenderer shapeRenderer;
+	private boolean debug = true;
+	private Input prevInput;
+	
+	
+	//TEST
+	Box2DDebugRenderer debugRenderer;
+	private World world;
+	private BodyDef treeBodyDef;
+	private Body treeBody;
+	private PolygonShape treeShape;
+	//
+	
+	
+	private ArrayList<Rectangle> adjacentRects = new ArrayList<Rectangle>();
+
+	@Override
+	public void create() {				
+		w = Gdx.graphics.getWidth();
+		h = Gdx.graphics.getHeight();
+
+		hudBatch = new SpriteBatch();
+		
+		shapeRenderer = new ShapeRenderer();
+
+		prevInput = Gdx.input;
+		
+		assetManager = new AssetManager();
+		loadResources();
+
+		font = new BitmapFont();
+		font.scale(0.1f);
+		font.setColor(Color.BLACK);
+
+		tileMapManager = new TileMapManager();
+		
+		worldBatch = tileMapManager.getMapRenderer().getSpriteBatch();
+		
+		
+		minCamPos = new Vector2(w / (tileMapManager.getTileSize() * 2), h / (tileMapManager.getTileSize() * 2));
+		maxCamPos = new Vector2(tileMapManager.getMapWidth() - minCamPos.x, tileMapManager.getMapHeight() - minCamPos.y);
+		
+		//remove maxCamPos and minCamPos!!!
+		worldBounds = new Rectangle(minCamPos.x, minCamPos.y, maxCamPos.x - minCamPos.x, maxCamPos.y - minCamPos.y);
+		
+		camera = new OrthographicCamera(
+				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
+				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
+		camera.setToOrtho(false, w / tileMapManager.getTileSize(), h / tileMapManager.getTileSize());		
+		camera.update();		
+		
+		//TEST
+		worldManager = new Box2dWorldManager();
+//		world = new World(new Vector2(0, -5), true);		
+//		debugRenderer = new Box2DDebugRenderer();
+		
+		treeBodyDef = new BodyDef();	
+		treeBody = world.createBody(treeBodyDef);
+		treeBodyDef.position.set(new Vector2(0,5));
+		
+		treeShape = new PolygonShape();
+		// Set the polygon shape as a box which is twice the size of our view port and 20 high
+		// (setAsBox takes half-width and half-height as arguments)
+		treeShape.setAsBox(camera.viewportWidth, 4.0f);
+		// Create a fixture from our polygon shape and add it to our ground body  
+		treeBody.createFixture(treeShape, 0.0f); 
+		// Clean up after ourselves
+		treeShape.dispose();
+		//
+		
+		
+		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), world);
+		
+		//Create the bodies
+		String[] = {"shape"};
+		worldManager.createBodies(tileMapManager.getTilesWithProperties(, 0, 0, 0, w / 32, h / 32));
+	}
+
+	@Override
+	public void dispose() {
+		worldBatch.dispose();
+		tileMapManager.dispose();
+		assetManager.dispose();		
+		shapeRenderer.dispose();
+		player.dispose();
+		worldManager.destroyBodies();
+	}
+
+	@Override
+	public void render() {
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		if (assetManager.update()) {
+			 handleInput();	
+
+//			Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
+//						(int)player.getWorldPosition().y, 0);
+			 
+//			if(cell.getTile().getProperties().get("walkable") != "false")
+			player.update(worldBounds, Gdx.graphics.getDeltaTime());
+			
+			setCameraPos(player.getWorldPosition().x, player.getWorldPosition().y);					
+
+			camera.update();							
+			
+			tileMapManager.renderBgLayers(camera);
+
+			worldBatch.begin();			
+			player.draw(worldBatch);			
+			worldBatch.end();					
+						
+			tileMapManager.renderFgLayers(camera);				
+			
+			//Debug stuff
+			if(debug)
+			{
+//				Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
+//						(int)player.getWorldPosition().y, 0);
+//				MapProperties props = cell.getTile().getProperties();
+//				
+//				if(props.get("swimmable") != null)
+//				{
+////					String key = props.getKeys().next();
+//					System.out.println("swimmable: " +  props.get("swimmable"));	
+//				}
+								
+//				System.out.println(tileMapManager.getTileAt((int)player.getWorldPosition().x,
+//						(int)player.getWorldPosition().y, 0).getProperties().get("walkable"));
+//				
+							
+				//draw camera bounds
+				shapeRenderer.setProjectionMatrix(camera.combined);
+				shapeRenderer.begin(ShapeType.Filled);
+				shapeRenderer.setColor(Color.RED);
+				shapeRenderer.rect(camera.position.x - 0.1f, camera.position.y - 0.1f, 0.2f, 0.2f);				
+				shapeRenderer.end();
+				
+				shapeRenderer.begin(ShapeType.Line);
+//				shapeRenderer.setColor(new Color(255,0,0,100));								
+//				
+				//draw player bounding rect
+				shapeRenderer.rect(
+						player.getWorldPosition().x, 
+						player.getWorldPosition().y, 
+						player.getBoundingRectangle().width / tileMapManager.getTileSize(), 
+						player.getBoundingRectangle().height / tileMapManager.getTileSize());								
+			
+				shapeRenderer.end();
+				
+				hudBatch.begin();
+				font.draw(hudBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 40);
+				hudBatch.end();
+				
+				debugRenderer.render(world, camera.combined);
+			}
+			
+			world.step(1/60f,6, 2);
+		}
+	}
+
+	@Override
+	public void resize(int width, int height) {
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	@Override
+	public void resume() {
+	}
+
+	private void handleInput() {	
+		
+		if(Gdx.input.isKeyPressed(Keys.SPACE))
+
+			
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE))
+			Gdx.app.exit();
+		
+		if (Gdx.input.isKeyPressed(Keys.F1) && prevInput.isKeyPressed(Keys.F1)) {
+			debug = !debug;
+		}
+		if (Gdx.input.isKeyPressed(Keys.SPACE))
+		{
+			player.setPosition(player.getStartPos().x, player.getStartPos().y);
+		}
+		
+		if (Gdx.input.isTouched()) {
+			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {;
+				System.out.println("camPos: " + camera.position.x + ":" + camera.position.y);								
+//				camera.translate(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
+//			setCameraPos(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
+			}
+		}
+		
+		prevInput = Gdx.input;
+	}
+
+	private void loadResources() {
+		assetManager.setLoader(TiledMap.class, new TmxMapLoader(
+				new InternalFileHandleResolver()));
+
+		// queue stuff for loading
+		assetManager.load("maps/map2.tmx", TiledMap.class);
+
+		// player textures
+		assetManager.load(Player.TEST_TEXTURE_PATH, Texture.class);
+		assetManager.load(Player.TEXTURE_PATH, Texture.class);
+		assetManager.load(Player.PACKFILE_PATH, TextureAtlas.class);
+
+		// do the actual loading
+		assetManager.finishLoading();
+	}
+
+	private void setCameraPos(float x, float y) {	
+		if (x < minCamPos.x)
+			camera.position.x = minCamPos.x;
+		else if (x > maxCamPos.x)
+			camera.position.x = maxCamPos.x;
+		else
+			camera.position.x = x;
+		
+		if (y < minCamPos.y)
+			camera.position.y = minCamPos.y;
+		else if (y > maxCamPos.y)
+			camera.position.y = maxCamPos.y;
+		else
+			camera.position.y = y;
+		
+//		camera.unproject(camera.position);
+//		camera.position.x = Math.round(camera.position.x);
+//		camera.position.y = Math.round(camera.position.y);
+//		camera.project(camera.position);
+	}
+}
