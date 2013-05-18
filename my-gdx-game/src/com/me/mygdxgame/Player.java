@@ -24,8 +24,9 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-public class Player extends Sprite {	
+public class Player {	
 
+	private Sprite sprite;
 	private Vector3 worldPos = Vector3.Zero;
 	private Vector3 tmpPos = Vector3.Zero;
 	private Vector3 worldCenterPos = Vector3.Zero;
@@ -64,7 +65,7 @@ public class Player extends Sprite {
 	
 	public Player(Vector3 startPos, float scale, World world) {	
 //		super((Texture) MyGdxGame.assetManager.get(TEST_TEXTURE_PATH));
-		super();
+//		super();
 		
 		walking_spriteSheet = new TextureAtlas(PACKFILE_PATH);
 		
@@ -80,10 +81,15 @@ public class Player extends Sprite {
 		
 		this.startPos = startPos;				
 		
-		this.setRegion(currentFrame);
-		this.setBounds(startPos.x, startPos.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());	
+//		this.setRegion(currentFrame);
+		sprite = new Sprite(currentFrame);
 		
-		setOrigin(getWidth() / 2, getHeight() / 2);
+//		this.setBounds(startPos.x, startPos.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());	
+		sprite.setBounds(startPos.x, startPos.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+
+//		setOrigin(getWidth() / 2, getHeight() / 2);
+		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+		
 		
 //		///BOX2d TEST STUFF
 		bodyDef = new BodyDef();		
@@ -103,17 +109,21 @@ public class Player extends Sprite {
 //
 //		// Create a circle shape and set its radius
 		circle = new CircleShape();
-		circle.setRadius((getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
+		circle.setRadius((sprite.getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
 //
 		// Create a fixture definition to apply our shape to
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = circle;
 		fixtureDef.density = 0.5f; 
-		fixtureDef.friction = 0.4f;
-//		fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+		fixtureDef.friction = 0.6f;
+		fixtureDef.restitution = 0.05f; // Make it bounce a little bit
 //
 //		// Create our fixture and attach it to the body
-		fixture = body.createFixture(fixtureDef);
+		fixture = body.createFixture(fixtureDef);				
+		
+		body.setUserData(sprite);		
+		
+		circle.dispose();
 //		////////////////////
 	}
 	
@@ -124,14 +134,17 @@ public class Player extends Sprite {
 		handleInput(worldBounds);			
 	}
 	
-	@Override
 	public void draw(SpriteBatch spriteBatch) {
-		spriteBatch.draw(currentFrame, getWorldPosition().x, getWorldPosition().y, getWidth() /32, getHeight() / 32);
+		spriteBatch.draw(currentFrame,
+				getWorldPosition().x,
+				getWorldPosition().y,
+				sprite.getWidth()  /Constants.TILE_SIZE,
+				sprite.getHeight() / Constants.TILE_SIZE);
 	}
 	
 	public void dispose()
 	{
-//		circle.dispose();
+		circle.dispose();
 	}
 	
 	private void setCurrentAnimationFrame()
@@ -173,11 +186,11 @@ public class Player extends Sprite {
 	
 	
 	private void handleInput(Rectangle worldBounds) {
-		tmpPos.x = getX();
-		tmpPos.y = getY();
+		tmpPos.x = sprite.getX();
+		tmpPos.y = sprite.getY();
 		
-//		if (Gdx.input.isKeyPressed(Keys.SPACE))
-//			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
+		if (Gdx.input.isKeyPressed(Keys.SPACE))
+			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
 		
 		if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT))
 		{
@@ -188,27 +201,29 @@ public class Player extends Sprite {
 			isStrafing = false;			
 		}
 		
+		float movement = (Gdx.graphics.getDeltaTime() * speed) * Constants.WORLD_TO_BOX;
 		if (Gdx.input.isKeyPressed(Keys.UP)) {		
-			tmpPos.y = getY() + (Gdx.graphics.getDeltaTime() * speed);
-//			setY(Math.round()));
+			body.applyLinearImpulse(new Vector2(0f, movement), body.getWorldCenter(), true);
+			tmpPos.y = sprite.getY() + (Gdx.graphics.getDeltaTime() * speed);
 			
 			if(!isStrafing)
 				state = State.WalkingUp;
 		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			tmpPos.y = getY() - (Gdx.graphics.getDeltaTime() * speed);
-//			setY(Math.round(getY() - (Gdx.graphics.getDeltaTime() * speed)));
+			body.applyLinearImpulse(new Vector2(0f, -movement), body.getWorldCenter(), true);
+			tmpPos.y = sprite.getY() - (Gdx.graphics.getDeltaTime() * speed);
+			
 			
 			if(!isStrafing)
 				state = State.WalkingDown;
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			tmpPos.x = getX() - (Gdx.graphics.getDeltaTime() * speed);
-//			setX(Math.round(getX() - (Gdx.graphics.getDeltaTime() * speed)));
+			body.applyLinearImpulse(new Vector2(-movement, 0f), body.getWorldCenter(), true);
+			tmpPos.x = sprite.getX() - (Gdx.graphics.getDeltaTime() * speed);
 			
 			if(!isStrafing)
 				state = State.WalkingLeft;
-		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			tmpPos.x = getX() + (Gdx.graphics.getDeltaTime() * speed);
-//			setX(Math.round(getX() + (Gdx.graphics.getDeltaTime() * speed)));
+		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {			
+			body.applyLinearImpulse(new Vector2(movement, 0f), body.getWorldCenter(), true);
+			tmpPos.x = sprite.getX() + (Gdx.graphics.getDeltaTime() * speed);//			
 			
 			if(!isStrafing)
 				state = State.WalkingRight;
@@ -221,46 +236,33 @@ public class Player extends Sprite {
 
 		if (Gdx.input.isTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-				System.out.println(getX() + ":" + getY());
-//				System.out.println("cam " + Math.round(getX()) / 32f + ":" + Math.round(getY()) / 32f);
-				tmpPos.x = Math.round(getX() + -Gdx.input.getDeltaX());
-				tmpPos.y = Math.round(getY() + Gdx.input.getDeltaY());
+				System.out.println(sprite.getX() + ":" + sprite.getY());//				
+				tmpPos.x = Math.round(sprite.getX() + -Gdx.input.getDeltaX());
+				tmpPos.y = Math.round(sprite.getY() + Gdx.input.getDeltaY());
 			}
 		}
 		
-		setX(tmpPos.x);
-		setY(tmpPos.y);
-//		if(tmpPos.x < (worldBounds.x + worldBounds.width))
-//			setX(tmpPos.x);
-//		else
-//			tmpPos.x = worldBounds.x + worldBounds.width;
-//		if(tmpPos.x > worldBounds.x)
-//			setX(tmpPos.x);
-//		else
-//			tmpPos.x = worldBounds.x;
-//		
-//		
-//		if(tmpPos.y < (worldBounds.y * 32 + worldBounds.height * 32))
-//			setY(tmpPos.y);
-//		else
-//			tmpPos.y = (worldBounds.y * 32 + worldBounds.height * 32);
-//		if(tmpPos.y > worldBounds.y * 32)
-//			setY(tmpPos.y);
-//		else
-//			tmpPos.y = worldBounds.y * 32;
+//		this.sprite = (Sprite)body.getUserData();
+//		sprite.setX(body.getPosition().x * Constants.BOX_TO_WORLD);
+//		sprite.setY(tmpPos.y);
+		sprite.setX(tmpPos.x);
+		sprite.setY(tmpPos.y);		
+	}
+	
+	public Sprite getSprite()
+	{
+		return this.sprite;
 	}
 
 	public Vector3 getWorldPosition() {
-//		worldPos.x =  Math.round(getX()) / 32f;
-//		worldPos.y =  Math.round(getY()) / 32f;
-		worldPos.x =  getX() / 32;
-		worldPos.y =  getY() / 32;
+		worldPos.x =  sprite.getX() / 32;
+		worldPos.y =  sprite.getY() / 32;
 		return worldPos;
 	}	
 	
 	public Vector3 getWorldCenterPosition() {
-		worldCenterPos.x = Math.round(getX() + getOriginX()) / 32;
-		worldCenterPos.y = Math.round(getY() + getOriginY()) / 32;
+		worldCenterPos.x = Math.round(sprite.getX() + sprite.getOriginX()) / 32;
+		worldCenterPos.y = Math.round(sprite.getY() + sprite.getOriginY()) / 32;
 		return worldCenterPos;
 	}
 		

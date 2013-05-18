@@ -205,8 +205,8 @@ public class MyGdxGame implements ApplicationListener {
 				shapeRenderer.rect(
 						player.getWorldPosition().x, 
 						player.getWorldPosition().y, 
-						player.getBoundingRectangle().width / tileMapManager.getTileSize(), 
-						player.getBoundingRectangle().height / tileMapManager.getTileSize());								
+						player.getSprite().getBoundingRectangle().width / tileMapManager.getTileSize(), 
+						player.getSprite().getBoundingRectangle().height / tileMapManager.getTileSize());								
 			
 				shapeRenderer.end();
 				
@@ -236,20 +236,16 @@ public class MyGdxGame implements ApplicationListener {
 	}
 
 	private void handleInput() {	
-		
-		if(Gdx.input.isKeyPressed(Keys.SPACE))
-
-			
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE))
 			Gdx.app.exit();
 		
 		if (Gdx.input.isKeyPressed(Keys.F1) && prevInput.isKeyPressed(Keys.F1)) {
 			debug = !debug;
 		}
-		if (Gdx.input.isKeyPressed(Keys.SPACE))
-		{
-			player.setPosition(player.getStartPos().x, player.getStartPos().y);
-		}
+//		if (Gdx.input.isKeyPressed(Keys.SPACE))
+//		{
+//			player.getSprite().setPosition(player.getStartPos().x, player.getStartPos().y);
+//		}
 		
 		if (Gdx.input.isTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {;

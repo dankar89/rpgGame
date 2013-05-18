@@ -147,7 +147,16 @@ public class TileMapManager {
 									}
 								}
 								
-								filteredDataObjects.add(new Box2dMapObjectData(sType, bType, new Vector2(x + ((this.getTileSize() / 2) * Constants.WORLD_TO_BOX), y + ((this.getTileSize() / 2) * Constants.WORLD_TO_BOX))));						
+								filteredDataObjects.add(
+										new Box2dMapObjectData(
+												sType,
+												bType,
+												new Vector2(
+														x + ((this.getTileSize() / 2) * Constants.WORLD_TO_BOX),
+														y + ((this.getTileSize() / 2) * Constants.WORLD_TO_BOX)
+														)
+												)
+										);						
 							}
 	//					}
 					}
