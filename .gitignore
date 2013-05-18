@@ -2,7 +2,11 @@
 ## Eclipse
 #################
 
+<<<<<<< HEAD
 #*.pydevproject
+=======
+*.pydevproject
+>>>>>>> added eclipse proj files
 #.project
 .metadata
 bin/
