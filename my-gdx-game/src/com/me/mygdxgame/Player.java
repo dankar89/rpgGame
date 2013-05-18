@@ -3,24 +3,21 @@ package com.me.mygdxgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -52,7 +49,6 @@ public class Player {
 	private Body body;
 	private CircleShape circle;
 	private FixtureDef fixtureDef;
-	private Fixture fixture;
 	private Vector2 bodyPos = Vector2.Zero;
 	
 	enum State {
@@ -112,18 +108,20 @@ public class Player {
 		circle.setRadius((sprite.getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
 //
 		// Create a fixture definition to apply our shape to
-		fixtureDef = new FixtureDef();
-		fixtureDef.shape = circle;
-		fixtureDef.density = 0.5f; 
-		fixtureDef.friction = 0.6f;
-		fixtureDef.restitution = 0.05f; // Make it bounce a little bit
-//
+//		fixtureDef = new FixtureDef();
+//		fixtureDef.shape = circle;
+//		fixtureDef.density = 0.5f; 
+//		fixtureDef.friction = 0.6f;
+//		fixtureDef.restitution = 0.05f; // Make it bounce a little bit
+		
 //		// Create our fixture and attach it to the body
-		fixture = body.createFixture(fixtureDef);				
-		
-		body.setUserData(sprite);		
-		
+		body.createFixture(circle, 1);			
 		circle.dispose();
+		
+		body.setUserData(sprite);
+		body.setFixedRotation(true);
+		body.setLinearVelocity(Vector2.Zero);
+//		body.setLinearDamping(5f);			
 //		////////////////////
 	}
 	
@@ -138,6 +136,8 @@ public class Player {
 		spriteBatch.draw(currentFrame,
 				getWorldPosition().x,
 				getWorldPosition().y,
+//				body.getPosition().x,
+//				body.getPosition().y,
 				sprite.getWidth()  /Constants.TILE_SIZE,
 				sprite.getHeight() / Constants.TILE_SIZE);
 	}
@@ -189,8 +189,8 @@ public class Player {
 		tmpPos.x = sprite.getX();
 		tmpPos.y = sprite.getY();
 		
-		if (Gdx.input.isKeyPressed(Keys.SPACE))
-			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
+//		if (Gdx.input.isKeyPressed(Keys.SPACE))
+//			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
 		
 		if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT))
 		{
@@ -203,13 +203,13 @@ public class Player {
 		
 		float movement = (Gdx.graphics.getDeltaTime() * speed) * Constants.WORLD_TO_BOX;
 		if (Gdx.input.isKeyPressed(Keys.UP)) {		
-			body.applyLinearImpulse(new Vector2(0f, movement), body.getWorldCenter(), true);
+//			body.applyLinearImpulse(new Vector2(0f, movement), body.getWorldCenter(), true);
 			tmpPos.y = sprite.getY() + (Gdx.graphics.getDeltaTime() * speed);
 			
 			if(!isStrafing)
 				state = State.WalkingUp;
 		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			body.applyLinearImpulse(new Vector2(0f, -movement), body.getWorldCenter(), true);
+//			body.applyLinearImpulse(new Vector2(0f, -movement), body.getWorldCenter(), true);
 			tmpPos.y = sprite.getY() - (Gdx.graphics.getDeltaTime() * speed);
 			
 			
@@ -218,18 +218,21 @@ public class Player {
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 			body.applyLinearImpulse(new Vector2(-movement, 0f), body.getWorldCenter(), true);
 			tmpPos.x = sprite.getX() - (Gdx.graphics.getDeltaTime() * speed);
+//			body.setLinearVelocity(-movement, 0f);
 			
 			if(!isStrafing)
 				state = State.WalkingLeft;
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {			
 			body.applyLinearImpulse(new Vector2(movement, 0f), body.getWorldCenter(), true);
-			tmpPos.x = sprite.getX() + (Gdx.graphics.getDeltaTime() * speed);//			
+			tmpPos.x = sprite.getX() + (Gdx.graphics.getDeltaTime() * speed);//
+//			body.setLinearVelocity(movement, 0f);
 			
 			if(!isStrafing)
 				state = State.WalkingRight;
 		}
 		else			
 		{
+			body.setLinearVelocity(0f, 0f);
 			if(!isStrafing)
 				state = State.Standing;
 		}
@@ -241,8 +244,9 @@ public class Player {
 				tmpPos.y = Math.round(sprite.getY() + Gdx.input.getDeltaY());
 			}
 		}
+				
 		
-//		this.sprite = (Sprite)body.getUserData();
+		this.sprite = (Sprite)body.getUserData();
 //		sprite.setX(body.getPosition().x * Constants.BOX_TO_WORLD);
 //		sprite.setY(tmpPos.y);
 		sprite.setX(tmpPos.x);
