@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Box2dWorldManager {
 
@@ -50,12 +49,10 @@ public class Box2dWorldManager {
 				tmpShape.setRadius(16 * Constants.WORLD_TO_BOX);
 			}
 			
-			tmpBody.createFixture(tmpShape, 0.0f);
-			
-			tmpShape.dispose();
-				
+			tmpBody.createFixture(tmpShape, 0.0f);										
 //			bodies.add();
 		}
+		tmpShape.dispose();
 	}
 	
 	public void  destroyBodies()
