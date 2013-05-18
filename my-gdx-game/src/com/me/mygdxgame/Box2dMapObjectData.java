@@ -18,4 +18,12 @@ public class Box2dMapObjectData {
 		
 		this.pos = pos;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "shapeType: " + shapeType.toString() + "\n" +
+				"bodyType: " + bodyType.toString() + "\n" + 
+				"pos: " + pos.toString();
+	}
 }

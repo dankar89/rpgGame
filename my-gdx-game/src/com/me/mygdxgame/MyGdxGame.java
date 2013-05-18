@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
@@ -51,13 +52,13 @@ public class MyGdxGame implements ApplicationListener {
 	//TEST
 	Box2DDebugRenderer debugRenderer;
 	private World world;
-	private BodyDef treeBodyDef;
-	private Body treeBody;
-	private PolygonShape treeShape;
+//	private BodyDef treeBodyDef;
+//	private Body treeBody;
+//	private PolygonShape treeShape;
 	//
 	
 	
-	private ArrayList<Rectangle> adjacentRects = new ArrayList<Rectangle>();
+//	private ArrayList<Rectangle> adjacentRects = new ArrayList<Rectangle>();
 
 	@Override
 	public void create() {				
@@ -114,11 +115,27 @@ public class MyGdxGame implements ApplicationListener {
 		//
 		
 		
-		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), world);
+		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), worldManager.getWorld());
 		
-		//Create the bodies
-		String[] props = {"shape"};
-		worldManager.createBodies(tileMapManager.getTilesWithProperties(props, 0, 0, 0, w / 32, h / 32));
+		ArrayList<Box2dMapObjectData> objData = tileMapManager.getBox2dMapObjects("shape",
+				Constants.BACKGROUND_LAYER_INDEX,
+				0,
+				0,
+				w / tileMapManager.getTileSize(),
+				h / tileMapManager.getTileSize());
+		
+		if(!objData.isEmpty())
+		{
+			for (Box2dMapObjectData od : objData) {
+				System.out.println(od);
+			}
+			
+			worldManager.createBodies(objData);
+		}
+		else
+		{
+			System.out.println("no obj data found!");
+		}
 	}
 
 	@Override
@@ -236,9 +253,10 @@ public class MyGdxGame implements ApplicationListener {
 		
 		if (Gdx.input.isTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {;
-				System.out.println("camPos: " + camera.position.x + ":" + camera.position.y);								
-//				camera.translate(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
-//			setCameraPos(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
+//				System.out.println("camPos: " + camera.position.x + ":" + camera.position.y);								
+//				Cell cell = tileMapManager.getBaseMapLayer().getCell(Math.round(Gdx.input.getX() / 32), Math.round(Gdx.input.getY() / 32));
+//				if(cell.getTile().getProperties().containsKey("shape"))
+//					System.out.println("yes");
 			}
 		}
 		

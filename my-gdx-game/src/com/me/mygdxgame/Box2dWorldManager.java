@@ -17,15 +17,14 @@ public class Box2dWorldManager {
 
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
-	
-	private ArrayList<Body> bodies = new ArrayList<Body>();
+		
 	private Shape tmpShape;
 	private Body tmpBody;
 	private BodyDef tmpBodyDef;
 	
 	public Box2dWorldManager()
 	{	
-		world = new World(new Vector2(0, -5), true);		
+		world = new World(new Vector2(0, 0), true);		
 		debugRenderer = new Box2DDebugRenderer();
 		
 		tmpBodyDef = new BodyDef();
@@ -61,7 +60,8 @@ public class Box2dWorldManager {
 	
 	public void  destroyBodies()
 	{
-		
+		while(world.getBodies().hasNext())
+			world.destroyBody(world.getBodies().next());
 	}
 	
 	public void destroyBodyAt(int x, int y)
@@ -80,6 +80,11 @@ public class Box2dWorldManager {
 	public void renderDebug(Matrix4 projMatrix)
 	{
 		debugRenderer.render(this.world, projMatrix);
+	}
+	
+	public World getWorld()
+	{
+		return world;
 	}
 	
 }

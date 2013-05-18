@@ -52,6 +52,7 @@ public class Player extends Sprite {
 	private CircleShape circle;
 	private FixtureDef fixtureDef;
 	private Fixture fixture;
+	private Vector2 bodyPos = Vector2.Zero;
 	
 	enum State {
 		Standing,
@@ -77,38 +78,42 @@ public class Player extends Sprite {
 		
 		this.scale = scale;		
 		
-		this.startPos = startPos;		
-		
-		setOrigin(getWidth() / 2, getHeight() / 2);
+		this.startPos = startPos;				
 		
 		this.setRegion(currentFrame);
 		this.setBounds(startPos.x, startPos.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());	
 		
+		setOrigin(getWidth() / 2, getHeight() / 2);
 		
 //		///BOX2d TEST STUFF
-//		bodyDef = new BodyDef();
-//		// We set our body to dynamic, for something like ground which doesnt move we would set it to StaticBody
-//		bodyDef.type = BodyType.DynamicBody;
+		bodyDef = new BodyDef();		
+		bodyDef.type = BodyType.DynamicBody;
 //		// Set our body's starting position in the world
-//		bodyDef.position.set(getWorldPosition().x, getWorldPosition().y);
+		
+		//add a small offset to the position to better match the sprite
+		float shapeOffset = 5.0f * Constants.WORLD_TO_BOX;
+		bodyPos = new Vector2(
+				getWorldPosition().x + ((Constants.TILE_SIZE / 2) * Constants.WORLD_TO_BOX),
+				getWorldPosition().y + (((Constants.TILE_SIZE / 2) * Constants.WORLD_TO_BOX) - shapeOffset));
+		bodyDef.position.set(bodyPos.x, bodyPos.y);
 //		
 //		
 //		// Create our body in the world using our body definition
-//		body = world.createBody(bodyDef);
+		body = world.createBody(bodyDef);
 //
-//		// Create a circle shape and set its radius to 6
-//		circle = new CircleShape();
-//		circle.setRadius((getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
+//		// Create a circle shape and set its radius
+		circle = new CircleShape();
+		circle.setRadius((getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
 //
-//		// Create a fixture definition to apply our shape to
-//		fixtureDef = new FixtureDef();
-//		fixtureDef.shape = circle;
-//		fixtureDef.density = 0.5f; 
-//		fixtureDef.friction = 0.4f;
+		// Create a fixture definition to apply our shape to
+		fixtureDef = new FixtureDef();
+		fixtureDef.shape = circle;
+		fixtureDef.density = 0.5f; 
+		fixtureDef.friction = 0.4f;
 //		fixtureDef.restitution = 0.6f; // Make it bounce a little bit
 //
 //		// Create our fixture and attach it to the body
-//		fixture = body.createFixture(fixtureDef);
+		fixture = body.createFixture(fixtureDef);
 //		////////////////////
 	}
 	
@@ -171,8 +176,8 @@ public class Player extends Sprite {
 		tmpPos.x = getX();
 		tmpPos.y = getY();
 		
-		if (Gdx.input.isKeyPressed(Keys.SPACE))
-			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
+//		if (Gdx.input.isKeyPressed(Keys.SPACE))
+//			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
 		
 		if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT))
 		{

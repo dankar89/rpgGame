@@ -3,7 +3,6 @@ package com.me.mygdxgame;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -17,21 +16,20 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.Shape.Type;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class TileMapManager {
 	private TiledMap map;
-	private World world;
-	private Box2DDebugRenderer debugRenderer;
+//	private World world;
+//	private Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMapTileLayer terrainLayer;
-	private int[] backgroundLayers = { 0, 1 };
-	private int[] foregroundLayers = { 2 };
+	private int[] backgroundLayers = { Constants.TERRAIN_LAYER_INDEX, Constants.BACKGROUND_LAYER_INDEX, 5/*test layer*/ };
+	private int[] foregroundLayers = { Constants.FOREGROUND_LAYER_INDEX };
+	private int[] objectLayers = { Constants.OBJECT_LAYER_INDEX };
 	private float unitScale;
-	private Box2dWorldManager collisionManager;
+//	private Box2dWorldManager collisionManager;
 	
 	private ArrayList<Rectangle> adjacentCells = new ArrayList<Rectangle>();
 	private ArrayList<Box2dMapObjectData> filteredDataObjects = new ArrayList<Box2dMapObjectData>();
@@ -40,12 +38,12 @@ public class TileMapManager {
 		//get map
 		map = MyGdxGame.assetManager.get("maps/map2.tmx");
 
-		terrainLayer = (TiledMapTileLayer) map.getLayers().get("terrain");
+		terrainLayer = (TiledMapTileLayer) map.getLayers().get(Constants.TERRAIN_LAYER_NAME);
 
 		unitScale = 1 / (float) getTileSize();
 		mapRenderer = new OrthogonalTiledMapRenderer(map, unitScale);
 		
-		collisionManager = new Box2dWorldManager();
+//		collisionManager = new Box2dWorldManager();
 
 	}
 	
@@ -104,41 +102,54 @@ public class TileMapManager {
 	}
 	
 	
-	public ArrayList<Box2dMapObjectData> getTilesWithProperties(String[] props, int layerIndex, int startX, int startY, int endX, int endY)
+	public ArrayList<Box2dMapObjectData> getBox2dMapObjects(String prop, int layerIndex, int startX, int startY, int endX, int endY)
 	{
-		filteredDataObjects.clear();
+		filteredDataObjects.clear();		
 		TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(layerIndex);
-		TiledMapTile tile = null;
-		MapProperties tileProps;
+		MapProperties tileProps = null;
 		BodyType bType = BodyType.StaticBody;
 		Shape.Type sType = Shape.Type.Circle;
-		
-		
-		if(layer.getCell(startX, startY) != null)
+		TiledMapTile tile = null;
+						
+		for(int y = startY; y <= endY; y++)
 		{
-			
-			for(int y = startY; y <= endY; y++)
+			for(int x = startX; x <= endX; x++)
 			{
-				for(int x = startX; x <= endX; x++)
+				if(layer.getCell(x, y) != null)
 				{
-					tileProps = layer.getCell(x, y).getTile().getProperties();
-					for (String prop : props) {
-						if(tileProps.containsKey(prop))						
-						{
-							//if it has a shape property, we know it should be made into a box2d body
-							if(prop == "shape")
+					tile = layer.getCell(x, y).getTile();
+				
+					if(tile != null)
+					{
+						tileProps = tile.getProperties();						
+	//					for (String prop : props) {
+							if(tileProps.containsKey(prop))						
 							{
-								if(tileProps.get(prop) == "circle")	
+								//if it has a shape property, we know it should be made into a box2d body
+								if(tileProps.get(prop).equals("circle"))	
 									sType = Type.Circle;
-								else if(tileProps.get(prop) == "box")	
-									sType = Type.Polygon;
+								else if(tileProps.get(prop).equals("box"))	
+									sType = Type.Polygon;												
+	
+								if(tileProps.containsKey("body"))
+								{
+									if(tileProps.get("body").equals("static"))	
+									{
+											bType = BodyType.StaticBody;
+									}
+									else if(tileProps.get("body").equals("kinematic"))	
+									{
+											bType = BodyType.KinematicBody;
+									}
+									else if(tileProps.get("body").equals("dynamic"))	
+									{
+											bType = BodyType.DynamicBody;
+									}
+								}
 								
-								if(tileProps.get("body") == "static")	
-									bType = BodyType.StaticBody;
-							}													
-								
-							filteredDataObjects.add(new Box2dMapObjectData(sType, bType, new Vector2(x, y)));
-						}
+								filteredDataObjects.add(new Box2dMapObjectData(sType, bType, new Vector2(x + ((this.getTileSize() / 2) * Constants.WORLD_TO_BOX), y + ((this.getTileSize() / 2) * Constants.WORLD_TO_BOX))));						
+							}
+	//					}
 					}
 				}
 			}
@@ -182,6 +193,10 @@ public class TileMapManager {
 		return map.getLayers().get(i);
 	}
 	
+	public MapLayer getLayer(String name) {
+		return map.getLayers().get(name);
+	}
+	
 	public void setMap(TiledMap map) {
 		this.map = map;
 	}		
@@ -200,10 +215,6 @@ public class TileMapManager {
 
 	public TiledMapTileLayer getBaseMapLayer() {
 		return terrainLayer;
-	}
-
-	public void setBaseMapLayer(TiledMapTileLayer baseMapLayer) {
-		this.terrainLayer = baseMapLayer;
 	}
 	
 	public Vector3 getPlayerStartPos()
