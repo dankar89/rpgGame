@@ -19,17 +19,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class MyGdxGame implements ApplicationListener {
 	private OrthographicCamera camera;
@@ -39,6 +33,7 @@ public class MyGdxGame implements ApplicationListener {
 	private BitmapFont font;
 	private Vector2 maxCamPos, minCamPos;
 	private Rectangle worldBounds;
+	private Rectangle camRect;
 	private int w, h;
 	private Player player;
 	private TileMapManager tileMapManager;
@@ -50,14 +45,13 @@ public class MyGdxGame implements ApplicationListener {
 	
 	//TEST
 	Box2DDebugRenderer debugRenderer;
-	private World world;
-	private BodyDef treeBodyDef;
-	private Body treeBody;
-	private PolygonShape treeShape;
+//	private BodyDef treeBodyDef;
+//	private Body treeBody;
+//	private PolygonShape treeShape;
 	//
 	
 	
-	private ArrayList<Rectangle> adjacentRects = new ArrayList<Rectangle>();
+//	private ArrayList<Rectangle> adjacentRects = new ArrayList<Rectangle>();
 
 	@Override
 	public void create() {				
@@ -92,33 +86,38 @@ public class MyGdxGame implements ApplicationListener {
 				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
 				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
 		camera.setToOrtho(false, w / tileMapManager.getTileSize(), h / tileMapManager.getTileSize());		
-		camera.update();		
+		camera.update();	
+		
+		camRect = new Rectangle(camera.position.x - ((w / 32) / 2), camera.position.y - ((h / 32) / 2), w, h);
 		
 		//TEST
 		worldManager = new Box2dWorldManager();
-//		world = new World(new Vector2(0, -5), true);		
-//		debugRenderer = new Box2DDebugRenderer();
-		
-//		treeBodyDef = new BodyDef();	
-//		treeBody = world.createBody(treeBodyDef);
-//		treeBodyDef.position.set(new Vector2(0,5));
-//		
-//		treeShape = new PolygonShape();
-//		// Set the polygon shape as a box which is twice the size of our view port and 20 high
-//		// (setAsBox takes half-width and half-height as arguments)
-//		treeShape.setAsBox(camera.viewportWidth, 4.0f);
-//		// Create a fixture from our polygon shape and add it to our ground body  
-//		treeBody.createFixture(treeShape, 0.0f); 
-//		// Clean up after ourselves
-//		treeShape.dispose();
+
 		//
 		
 		
-		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), world);
+		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), worldManager.getWorld());
 		
-		//Create the bodies
-		String[] props = {"shape"};
-		worldManager.createBodies(tileMapManager.getTilesWithProperties(props, 0, 0, 0, w / 32, h / 32));
+		ArrayList<CollisionData> colData = tileMapManager.getBox2dMapObjects("shape",
+				Constants.BACKGROUND_LAYER_INDEX,
+//				5,
+				(int)camRect.x,
+				(int)camRect.y,
+				(int)camRect.width / tileMapManager.getTileSize(),
+				(int)camRect.height / tileMapManager.getTileSize());
+		
+		if(!colData.isEmpty())
+		{
+			for (CollisionData cd : colData) {
+				System.out.println(cd);
+			}
+			
+			worldManager.createBodies(colData);
+		}
+		else
+		{
+			System.out.println("no collision data found!");
+		}
 	}
 
 	@Override
@@ -139,10 +138,6 @@ public class MyGdxGame implements ApplicationListener {
 		if (assetManager.update()) {
 			 handleInput();	
 
-//			Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
-//						(int)player.getWorldPosition().y, 0);
-			 
-//			if(cell.getTile().getProperties().get("walkable") != "false")
 			player.update(worldBounds, Gdx.graphics.getDeltaTime());
 			
 			setCameraPos(player.getWorldPosition().x, player.getWorldPosition().y);					
@@ -159,26 +154,12 @@ public class MyGdxGame implements ApplicationListener {
 			
 			//Debug stuff
 			if(debug)
-			{
-//				Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
-//						(int)player.getWorldPosition().y, 0);
-//				MapProperties props = cell.getTile().getProperties();
-//				
-//				if(props.get("swimmable") != null)
-//				{
-////					String key = props.getKeys().next();
-//					System.out.println("swimmable: " +  props.get("swimmable"));	
-//				}
-								
-//				System.out.println(tileMapManager.getTileAt((int)player.getWorldPosition().x,
-//						(int)player.getWorldPosition().y, 0).getProperties().get("walkable"));
-//				
-							
+			{							
 				//draw camera bounds
 				shapeRenderer.setProjectionMatrix(camera.combined);
 				shapeRenderer.begin(ShapeType.Filled);
 				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.rect(camera.position.x - 0.1f, camera.position.y - 0.1f, 0.2f, 0.2f);				
+				shapeRenderer.rect(camera.position.x - 0.1f, camera.position.y - 0.1f, 0.2f, 0.2f);
 				shapeRenderer.end();
 				
 				shapeRenderer.begin(ShapeType.Line);
@@ -188,8 +169,8 @@ public class MyGdxGame implements ApplicationListener {
 				shapeRenderer.rect(
 						player.getWorldPosition().x, 
 						player.getWorldPosition().y, 
-						player.getBoundingRectangle().width / tileMapManager.getTileSize(), 
-						player.getBoundingRectangle().height / tileMapManager.getTileSize());								
+						player.getSprite().getBoundingRectangle().width / tileMapManager.getTileSize(), 
+						player.getSprite().getBoundingRectangle().height / tileMapManager.getTileSize());								
 			
 				shapeRenderer.end();
 				
@@ -202,7 +183,7 @@ public class MyGdxGame implements ApplicationListener {
 			}
 			
 //			world.step(1/60f,6, 2);
-			worldManager.update(1/60f);
+			worldManager.update(1/60f, camRect);
 		}
 	}
 
@@ -219,26 +200,16 @@ public class MyGdxGame implements ApplicationListener {
 	}
 
 	private void handleInput() {	
-		
-		if(Gdx.input.isKeyPressed(Keys.SPACE))
-
-			
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE))
 			Gdx.app.exit();
 		
 		if (Gdx.input.isKeyPressed(Keys.F1) && prevInput.isKeyPressed(Keys.F1)) {
 			debug = !debug;
 		}
-		if (Gdx.input.isKeyPressed(Keys.SPACE))
-		{
-			player.setPosition(player.getStartPos().x, player.getStartPos().y);
-		}
 		
 		if (Gdx.input.isTouched()) {
-			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {;
-				System.out.println("camPos: " + camera.position.x + ":" + camera.position.y);								
-//				camera.translate(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
-//			setCameraPos(-Gdx.input.getDeltaX() / 50f, Gdx.input.getDeltaY() / 50f);
+			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+
 			}
 		}
 		
@@ -276,9 +247,7 @@ public class MyGdxGame implements ApplicationListener {
 		else
 			camera.position.y = y;
 		
-//		camera.unproject(camera.position);
-//		camera.position.x = Math.round(camera.position.x);
-//		camera.position.y = Math.round(camera.position.y);
-//		camera.project(camera.position);
+		camRect.x = camera.position.x - ((w / tileMapManager.getTileSize()) / 2);
+		camRect.y = camera.position.y - ((h / tileMapManager.getTileSize()) / 2);
 	}
 }
