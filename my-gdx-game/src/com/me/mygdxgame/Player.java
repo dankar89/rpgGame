@@ -105,7 +105,7 @@ public class Player {
 //
 //		// Create a circle shape and set its radius
 		circle = new CircleShape();
-		circle.setRadius((sprite.getRegionWidth() / 2) * Constants.WORLD_TO_BOX);
+		circle.setRadius(((sprite.getRegionWidth() / 2) * Constants.WORLD_TO_BOX) - (shapeOffset / 2));
 //
 		// Create a fixture definition to apply our shape to
 //		fixtureDef = new FixtureDef();
@@ -115,7 +115,7 @@ public class Player {
 //		fixtureDef.restitution = 0.05f; // Make it bounce a little bit
 		
 //		// Create our fixture and attach it to the body
-		body.createFixture(circle, 1);			
+		body.createFixture(circle, 0);			
 		circle.dispose();
 		
 		body.setUserData(sprite);
@@ -216,16 +216,16 @@ public class Player {
 			if(!isStrafing)
 				state = State.WalkingDown;
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			body.applyLinearImpulse(new Vector2(-movement, 0f), body.getWorldCenter(), true);
+//			body.applyLinearImpulse(new Vector2(-movement, 0f), body.getWorldCenter(), true);
 			tmpPos.x = sprite.getX() - (Gdx.graphics.getDeltaTime() * speed);
-//			body.setLinearVelocity(-movement, 0f);
+//			body.setLinearVelocity(-movement * 10, 0f);
 			
 			if(!isStrafing)
 				state = State.WalkingLeft;
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {			
-			body.applyLinearImpulse(new Vector2(movement, 0f), body.getWorldCenter(), true);
+//			body.applyLinearImpulse(new Vector2(movement, 0f), body.getWorldCenter(), true);
 			tmpPos.x = sprite.getX() + (Gdx.graphics.getDeltaTime() * speed);//
-//			body.setLinearVelocity(movement, 0f);
+//			body.setLinearVelocity(movement * 10, 0f);			
 			
 			if(!isStrafing)
 				state = State.WalkingRight;

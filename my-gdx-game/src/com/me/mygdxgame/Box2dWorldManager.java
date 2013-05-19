@@ -1,8 +1,10 @@
 package com.me.mygdxgame;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -20,6 +22,7 @@ public class Box2dWorldManager {
 	private Shape tmpShape;
 	private Body tmpBody;
 	private BodyDef tmpBodyDef;
+	private Iterator<Body> bodies = null;
 	
 	public Box2dWorldManager()
 	{	
@@ -29,15 +32,15 @@ public class Box2dWorldManager {
 		tmpBodyDef = new BodyDef();
 	}
 	
-	public void createBodies(ArrayList<Box2dMapObjectData> objData)
+	public void createBodies(ArrayList<CollisionData> colData)
 	{		
-		for (Box2dMapObjectData od : objData) {
-			tmpBodyDef.type = od.bodyType;
-			tmpBodyDef.position.set(od.pos);
+		for (CollisionData cd : colData) {
+			tmpBodyDef.type = cd.bodyType;
+			tmpBodyDef.position.set(cd.pos);
 			
 			tmpBody = world.createBody(tmpBodyDef);
 			
-			if(od.shapeType == Shape.Type.Circle)
+			if(cd.shapeType == Shape.Type.Circle)
 			{
 				tmpShape = new CircleShape();
 				tmpShape.setRadius(16 * Constants.WORLD_TO_BOX);
@@ -49,8 +52,7 @@ public class Box2dWorldManager {
 				tmpShape.setRadius(16 * Constants.WORLD_TO_BOX);
 			}
 			
-			tmpBody.createFixture(tmpShape, 0.0f);										
-//			bodies.add();
+			tmpBody.createFixture(tmpShape, 0.0f);			
 		}
 		tmpShape.dispose();
 	}
@@ -69,8 +71,13 @@ public class Box2dWorldManager {
 	public void destroyBodyAt(int index)
 	{}
 	
-	public void update(float timeStep)
+	public void update(float timeStep, Rectangle camRect)
 	{
+//		while(world.getBodies().hasNext())
+//		{
+//			if(world.getBodies().next().getPosition().x < 0)
+//				System.out.println("hello?");
+//		}
 		world.step(1/60f,6, 2);
 	}
 	

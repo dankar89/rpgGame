@@ -32,7 +32,7 @@ public class TileMapManager {
 //	private Box2dWorldManager collisionManager;
 	
 	private ArrayList<Rectangle> adjacentCells = new ArrayList<Rectangle>();
-	private ArrayList<Box2dMapObjectData> filteredDataObjects = new ArrayList<Box2dMapObjectData>();
+	private ArrayList<CollisionData> filteredDataObjects = new ArrayList<CollisionData>();
 	
 	public TileMapManager() {
 		//get map
@@ -102,7 +102,7 @@ public class TileMapManager {
 	}
 	
 	
-	public ArrayList<Box2dMapObjectData> getBox2dMapObjects(String prop, int layerIndex, int startX, int startY, int endX, int endY)
+	public ArrayList<CollisionData> getBox2dMapObjects(String prop, int layerIndex, int startX, int startY, int endX, int endY)
 	{
 		filteredDataObjects.clear();		
 		TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(layerIndex);
@@ -148,7 +148,7 @@ public class TileMapManager {
 								}
 								
 								filteredDataObjects.add(
-										new Box2dMapObjectData(
+										new CollisionData(
 												sType,
 												bType,
 												new Vector2(

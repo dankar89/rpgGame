@@ -33,6 +33,7 @@ public class MyGdxGame implements ApplicationListener {
 	private BitmapFont font;
 	private Vector2 maxCamPos, minCamPos;
 	private Rectangle worldBounds;
+	private Rectangle camRect;
 	private int w, h;
 	private Player player;
 	private TileMapManager tileMapManager;
@@ -85,7 +86,9 @@ public class MyGdxGame implements ApplicationListener {
 				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
 				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
 		camera.setToOrtho(false, w / tileMapManager.getTileSize(), h / tileMapManager.getTileSize());		
-		camera.update();		
+		camera.update();	
+		
+		camRect = new Rectangle(camera.position.x - ((w / 32) / 2), camera.position.y - ((h / 32) / 2), w, h);
 		
 		//TEST
 		worldManager = new Box2dWorldManager();
@@ -109,24 +112,25 @@ public class MyGdxGame implements ApplicationListener {
 		
 		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), worldManager.getWorld());
 		
-		ArrayList<Box2dMapObjectData> objData = tileMapManager.getBox2dMapObjects("shape",
-				Constants.BACKGROUND_LAYER_INDEX,
-				0,
-				0,
-				w / tileMapManager.getTileSize(),
-				h / tileMapManager.getTileSize());
+		ArrayList<CollisionData> colData = tileMapManager.getBox2dMapObjects("shape",
+//				Constants.BACKGROUND_LAYER_INDEX,
+				5,
+				(int)camRect.x,
+				(int)camRect.y,
+				(int)camRect.width / tileMapManager.getTileSize(),
+				(int)camRect.height / tileMapManager.getTileSize());
 		
-		if(!objData.isEmpty())
+		if(!colData.isEmpty())
 		{
-			for (Box2dMapObjectData od : objData) {
-				System.out.println(od);
+			for (CollisionData cd : colData) {
+				System.out.println(cd);
 			}
 			
-			worldManager.createBodies(objData);
+			worldManager.createBodies(colData);
 		}
 		else
 		{
-			System.out.println("no obj data found!");
+			System.out.println("no collision data found!");
 		}
 	}
 
@@ -155,7 +159,8 @@ public class MyGdxGame implements ApplicationListener {
 			player.update(worldBounds, Gdx.graphics.getDeltaTime());
 			
 			setCameraPos(player.getWorldPosition().x, player.getWorldPosition().y);					
-
+			
+//			System.out.println(camRect);
 			camera.update();							
 			
 			tileMapManager.renderBgLayers(camera);
@@ -187,7 +192,7 @@ public class MyGdxGame implements ApplicationListener {
 				shapeRenderer.setProjectionMatrix(camera.combined);
 				shapeRenderer.begin(ShapeType.Filled);
 				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.rect(camera.position.x - 0.1f, camera.position.y - 0.1f, 0.2f, 0.2f);				
+				shapeRenderer.rect(camera.position.x - 0.1f, camera.position.y - 0.1f, 0.2f, 0.2f);
 				shapeRenderer.end();
 				
 				shapeRenderer.begin(ShapeType.Line);
@@ -211,7 +216,7 @@ public class MyGdxGame implements ApplicationListener {
 			}
 			
 //			world.step(1/60f,6, 2);
-			worldManager.update(1/60f);
+			worldManager.update(1/60f, camRect);
 		}
 	}
 
@@ -282,6 +287,8 @@ public class MyGdxGame implements ApplicationListener {
 		else
 			camera.position.y = y;
 		
+		camRect.x = camera.position.x - ((w / 32) / 2);
+		camRect.y = camera.position.y - ((h / 32) / 2);
 //		camera.unproject(camera.position);
 //		camera.position.x = Math.round(camera.position.x);
 //		camera.position.y = Math.round(camera.position.y);
