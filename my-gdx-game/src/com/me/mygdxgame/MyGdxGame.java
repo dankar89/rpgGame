@@ -92,29 +92,15 @@ public class MyGdxGame implements ApplicationListener {
 		
 		//TEST
 		worldManager = new Box2dWorldManager();
-//		world = new World(new Vector2(0, -5), true);		
-//		debugRenderer = new Box2DDebugRenderer();
-		
-//		treeBodyDef = new BodyDef();	
-//		treeBody = world.createBody(treeBodyDef);
-//		treeBodyDef.position.set(new Vector2(0,5));
-//		
-//		treeShape = new PolygonShape();
-//		// Set the polygon shape as a box which is twice the size of our view port and 20 high
-//		// (setAsBox takes half-width and half-height as arguments)
-//		treeShape.setAsBox(camera.viewportWidth, 4.0f);
-//		// Create a fixture from our polygon shape and add it to our ground body  
-//		treeBody.createFixture(treeShape, 0.0f); 
-//		// Clean up after ourselves
-//		treeShape.dispose();
+
 		//
 		
 		
 		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), worldManager.getWorld());
 		
 		ArrayList<CollisionData> colData = tileMapManager.getBox2dMapObjects("shape",
-//				Constants.BACKGROUND_LAYER_INDEX,
-				5,
+				Constants.BACKGROUND_LAYER_INDEX,
+//				5,
 				(int)camRect.x,
 				(int)camRect.y,
 				(int)camRect.width / tileMapManager.getTileSize(),
@@ -152,15 +138,10 @@ public class MyGdxGame implements ApplicationListener {
 		if (assetManager.update()) {
 			 handleInput();	
 
-//			Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
-//						(int)player.getWorldPosition().y, 0);
-			 
-//			if(cell.getTile().getProperties().get("walkable") != "false")
 			player.update(worldBounds, Gdx.graphics.getDeltaTime());
 			
 			setCameraPos(player.getWorldPosition().x, player.getWorldPosition().y);					
-			
-//			System.out.println(camRect);
+
 			camera.update();							
 			
 			tileMapManager.renderBgLayers(camera);
@@ -173,21 +154,7 @@ public class MyGdxGame implements ApplicationListener {
 			
 			//Debug stuff
 			if(debug)
-			{
-//				Cell cell = tileMapManager.getCellAt((int)player.getWorldPosition().x,
-//						(int)player.getWorldPosition().y, 0);
-//				MapProperties props = cell.getTile().getProperties();
-//				
-//				if(props.get("swimmable") != null)
-//				{
-////					String key = props.getKeys().next();
-//					System.out.println("swimmable: " +  props.get("swimmable"));	
-//				}
-								
-//				System.out.println(tileMapManager.getTileAt((int)player.getWorldPosition().x,
-//						(int)player.getWorldPosition().y, 0).getProperties().get("walkable"));
-//				
-							
+			{							
 				//draw camera bounds
 				shapeRenderer.setProjectionMatrix(camera.combined);
 				shapeRenderer.begin(ShapeType.Filled);
@@ -239,17 +206,10 @@ public class MyGdxGame implements ApplicationListener {
 		if (Gdx.input.isKeyPressed(Keys.F1) && prevInput.isKeyPressed(Keys.F1)) {
 			debug = !debug;
 		}
-//		if (Gdx.input.isKeyPressed(Keys.SPACE))
-//		{
-//			player.getSprite().setPosition(player.getStartPos().x, player.getStartPos().y);
-//		}
 		
 		if (Gdx.input.isTouched()) {
-			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {;
-//				System.out.println("camPos: " + camera.position.x + ":" + camera.position.y);								
-//				Cell cell = tileMapManager.getBaseMapLayer().getCell(Math.round(Gdx.input.getX() / 32), Math.round(Gdx.input.getY() / 32));
-//				if(cell.getTile().getProperties().containsKey("shape"))
-//					System.out.println("yes");
+			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+
 			}
 		}
 		
@@ -287,11 +247,7 @@ public class MyGdxGame implements ApplicationListener {
 		else
 			camera.position.y = y;
 		
-		camRect.x = camera.position.x - ((w / 32) / 2);
-		camRect.y = camera.position.y - ((h / 32) / 2);
-//		camera.unproject(camera.position);
-//		camera.position.x = Math.round(camera.position.x);
-//		camera.position.y = Math.round(camera.position.y);
-//		camera.project(camera.position);
+		camRect.x = camera.position.x - ((w / tileMapManager.getTileSize()) / 2);
+		camRect.y = camera.position.y - ((h / tileMapManager.getTileSize()) / 2);
 	}
 }

@@ -73,11 +73,17 @@ public class Box2dWorldManager {
 	
 	public void update(float timeStep, Rectangle camRect)
 	{
-//		while(world.getBodies().hasNext())
-//		{
-//			if(world.getBodies().next().getPosition().x < 0)
-//				System.out.println("hello?");
-//		}
+//		System.out.println(world.getBodyCount());
+		if(world.getBodyCount() > 1)
+		{
+//			bodies = world.getBodies();
+//			System.out.println(world.getBodyCount());
+//			if(bodies.hasNext())
+//			{
+//					
+//			}
+			
+		}
 		world.step(1/60f,6, 2);
 	}
 	
