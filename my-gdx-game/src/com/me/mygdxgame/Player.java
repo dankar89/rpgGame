@@ -144,7 +144,7 @@ public class Player {
 	
 	public void dispose()
 	{
-		circle.dispose();
+//		circle.dispose();
 	}
 	
 	private void setCurrentAnimationFrame()
@@ -241,16 +241,21 @@ public class Player {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 				System.out.println(sprite.getX() + ":" + sprite.getY());//				
 				tmpPos.x = Math.round(sprite.getX() + -Gdx.input.getDeltaX());
-				tmpPos.y = Math.round(sprite.getY() + Gdx.input.getDeltaY());
+				tmpPos.y = Math.round(sprite.getY() + Gdx.input.getDeltaY());				
 			}
 		}
 				
 		
-		this.sprite = (Sprite)body.getUserData();
+//		this.sprite = (Sprite)body.getUserData();
 //		sprite.setX(body.getPosition().x * Constants.BOX_TO_WORLD);
 //		sprite.setY(tmpPos.y);
 		sprite.setX(tmpPos.x);
 		sprite.setY(tmpPos.y);		
+	}
+	
+	public Body getBody()
+	{
+		return this.body;
 	}
 	
 	public Sprite getSprite()

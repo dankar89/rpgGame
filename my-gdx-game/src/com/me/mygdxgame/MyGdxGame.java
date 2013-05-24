@@ -37,7 +37,7 @@ public class MyGdxGame implements ApplicationListener {
 	private int w, h;
 	private Player player;
 	private TileMapManager tileMapManager;
-	private Box2dWorldManager worldManager;
+	private Box2dManager worldManager;
 	private ShapeRenderer shapeRenderer;
 	private boolean debug = true;
 	private Input prevInput;
@@ -91,7 +91,7 @@ public class MyGdxGame implements ApplicationListener {
 		camRect = new Rectangle(camera.position.x - ((w / 32) / 2), camera.position.y - ((h / 32) / 2), w, h);
 		
 		//TEST
-		worldManager = new Box2dWorldManager();
+		worldManager = new Box2dManager();
 
 		//
 		
@@ -112,7 +112,7 @@ public class MyGdxGame implements ApplicationListener {
 				System.out.println(cd);
 			}
 			
-			worldManager.createBodies(colData);
+			worldManager.createMapObjects(colData);
 		}
 		else
 		{
@@ -207,9 +207,10 @@ public class MyGdxGame implements ApplicationListener {
 			debug = !debug;
 		}
 		
-		if (Gdx.input.isTouched()) {
+		if (Gdx.input.justTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-
+				if(worldManager.getBodies().hasNext())
+					worldManager.destroyBody(worldManager.getBodies().next());
 			}
 		}
 		

@@ -25,7 +25,7 @@ public class TileMapManager {
 //	private Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMapTileLayer terrainLayer;
-	private int[] backgroundLayers = { Constants.TERRAIN_LAYER_INDEX, Constants.BACKGROUND_LAYER_INDEX, 5/*test layer*/ };
+	private int[] backgroundLayers = { Constants.TERRAIN_LAYER_INDEX, Constants.BACKGROUND_LAYER_INDEX, /*5 test layer*/ };
 	private int[] foregroundLayers = { Constants.FOREGROUND_LAYER_INDEX };
 	private int[] objectLayers = { Constants.OBJECT_LAYER_INDEX };
 	private float unitScale;
