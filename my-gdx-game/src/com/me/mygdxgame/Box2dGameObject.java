@@ -24,11 +24,13 @@ public class Box2dGameObject {
 		this.pos = pos;
 		
 		this.body = world.createBody(this.bodyDef);
+		this.body.setUserData(this); //?
 	}
 	
-	public void update()
+	public void update(World world)
 	{
-		
+		if(isToBeDeleted())
+			world.destroyBody(this.body);
 	}
 	
 	public boolean isToBeDeleted()
@@ -39,5 +41,15 @@ public class Box2dGameObject {
 	public void setToBeDeleted(boolean bool)
 	{
 		isActive = bool;
+	}
+	
+	public Vector2 getPosition()
+	{
+		return pos;
+	}
+	
+	public Body getBody()
+	{
+		return this.body;
 	}
 }

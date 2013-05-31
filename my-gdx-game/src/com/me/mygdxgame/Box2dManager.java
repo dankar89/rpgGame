@@ -3,6 +3,7 @@ package com.me.mygdxgame;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -23,6 +24,7 @@ public class Box2dManager {
 	private Body tmpBody;
 	private BodyDef tmpBodyDef;
 	private Iterator<Body> bodies = null;
+	private Body nextBody;
 	private Box2dGameObject userData = null;
 	private ArrayList<CollisionData> collisionDataList;
 	private ArrayList<CollisionData> deletionList;;
@@ -118,17 +120,28 @@ public class Box2dManager {
 		world.destroyBody(body);
 	}
 	
-	public void update(float timeStep, Rectangle camRect)
+	public void update(float timeStep, OrthographicCamera cam)
 	{
-//		System.out.println(world.getBodyCount());
-		if(world.getBodyCount() > 1)
+		System.out.println(world.getBodyCount());
+		if(world.getBodyCount() > 1) 
 		{
 			bodies = world.getBodies();	
 			while(bodies.hasNext())
 			{
-				if(!bodies.next().isActive())
+				nextBody = bodies.next();
+				
+				
+				
+				
+				System.out.println("bodypos: " + nextBody.getPosition().x);
+//				System.out.println("campos: " + cam.position.x);
+				if(nextBody.getPosition().x < cam.position.x - (cam.viewportWidth / 16))
+//				if(!screenCamRect.contains(nextBody.getPosition().x * Constants.BOX_TO_WORLD,
+//						nextBody.getPosition().y * Constants.BOX_TO_WORLD))
 				{
-					world.destroyBody(bodies.next());
+//					world.destroyBody(nextBody);	
+					System.out.println("waah");
+//					break;
 				}
 			}
 			

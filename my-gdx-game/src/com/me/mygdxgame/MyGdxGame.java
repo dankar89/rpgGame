@@ -23,6 +23,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 public class MyGdxGame implements ApplicationListener {
@@ -32,6 +33,7 @@ public class MyGdxGame implements ApplicationListener {
 	public static AssetManager assetManager;
 	private BitmapFont font;
 	private Vector2 maxCamPos, minCamPos;
+	Vector3 screenCamPos;
 	private Rectangle worldBounds;
 	private Rectangle camRect;
 	private int w, h;
@@ -81,15 +83,17 @@ public class MyGdxGame implements ApplicationListener {
 		
 		//remove maxCamPos and minCamPos!!!
 		worldBounds = new Rectangle(minCamPos.x, minCamPos.y, maxCamPos.x - minCamPos.x, maxCamPos.y - minCamPos.y);
-		
+				
 		camera = new OrthographicCamera(
 				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
 				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
 		camera.setToOrtho(false, w / tileMapManager.getTileSize(), h / tileMapManager.getTileSize());		
 		camera.update();	
 		
-		camRect = new Rectangle(camera.position.x - ((w / 32) / 2), camera.position.y - ((h / 32) / 2), w, h);
-		
+//		screenCamPos = camera.position;
+//		camera.project(screenCamPos);
+		camRect = new Rectangle((camera.position.x) - ((w / 32) / 2), (camera.position.y) - ((h / 32) / 2), w, h);
+		System.out.println(camRect);
 		//TEST
 		worldManager = new Box2dManager();
 
@@ -107,7 +111,7 @@ public class MyGdxGame implements ApplicationListener {
 				(int)camRect.height / tileMapManager.getTileSize());
 		
 		if(!colData.isEmpty())
-		{
+		{ 
 			for (CollisionData cd : colData) {
 				System.out.println(cd);
 			}
@@ -183,7 +187,8 @@ public class MyGdxGame implements ApplicationListener {
 			}
 			
 //			world.step(1/60f,6, 2);
-			worldManager.update(1/60f, camRect);
+			
+			worldManager.update(1/60f, camera);
 		}
 	}
 
@@ -209,8 +214,9 @@ public class MyGdxGame implements ApplicationListener {
 		
 		if (Gdx.input.justTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-				if(worldManager.getBodies().hasNext())
-					worldManager.destroyBody(worldManager.getBodies().next());
+				System.out.println(camRect);
+//				if(worldManager.getBodies().hasNext())
+//					worldManager.destroyBody(worldManager.getBodies().next());
 			}
 		}
 		

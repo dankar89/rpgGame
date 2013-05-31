@@ -138,7 +138,7 @@ public class Player {
 				getWorldPosition().y,
 //				body.getPosition().x,
 //				body.getPosition().y,
-				sprite.getWidth()  /Constants.TILE_SIZE,
+				sprite.getWidth() / Constants.TILE_SIZE,
 				sprite.getHeight() / Constants.TILE_SIZE);
 	}
 	
@@ -239,7 +239,7 @@ public class Player {
 
 		if (Gdx.input.isTouched()) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-				System.out.println(sprite.getX() + ":" + sprite.getY());//				
+//				System.out.println(sprite.getX() + ":" + sprite.getY());//				
 				tmpPos.x = Math.round(sprite.getX() + -Gdx.input.getDeltaX());
 				tmpPos.y = Math.round(sprite.getY() + Gdx.input.getDeltaY());				
 			}
