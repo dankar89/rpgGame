@@ -14,4 +14,5 @@ public final class Constants {
 	static final int OBJECT_LAYER_INDEX = 3;
 	
 	static final int TILE_SIZE = 32;
+	static final float UNIT_SCALE = 1 / ((float)TILE_SIZE);
 }

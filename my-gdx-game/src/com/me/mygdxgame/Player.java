@@ -21,7 +21,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-public class Player {	
+public class Player{	
 
 	private Sprite sprite;
 	private Vector3 worldPos = Vector3.Zero;
@@ -77,13 +77,10 @@ public class Player {
 		
 		this.startPos = startPos;				
 		
-//		this.setRegion(currentFrame);
 		sprite = new Sprite(currentFrame);
 		
-//		this.setBounds(startPos.x, startPos.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());	
 		sprite.setBounds(startPos.x, startPos.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
 
-//		setOrigin(getWidth() / 2, getHeight() / 2);
 		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		
 		
@@ -126,7 +123,7 @@ public class Player {
 	}
 	
 	public void update(Rectangle worldBounds, float deltaTime) {		
-		stateTime += Gdx.graphics.getDeltaTime(); 
+		stateTime += deltaTime; 
 
 		setCurrentAnimationFrame();
 		handleInput(worldBounds);			

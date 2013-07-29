@@ -2,7 +2,9 @@ package com.me.mygdxgame;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -28,7 +30,6 @@ public class TileMapManager {
 	private int[] backgroundLayers = { Constants.TERRAIN_LAYER_INDEX, Constants.BACKGROUND_LAYER_INDEX, /*5 test layer*/ };
 	private int[] foregroundLayers = { Constants.FOREGROUND_LAYER_INDEX };
 	private int[] objectLayers = { Constants.OBJECT_LAYER_INDEX };
-	private float unitScale;
 //	private Box2dWorldManager collisionManager;
 	
 	private ArrayList<Rectangle> adjacentCells = new ArrayList<Rectangle>();
@@ -37,18 +38,12 @@ public class TileMapManager {
 	public TileMapManager() {
 		//get map
 		map = MyGdxGame.assetManager.get("maps/map2.tmx");
-
-		terrainLayer = (TiledMapTileLayer) map.getLayers().get(Constants.TERRAIN_LAYER_NAME);
-
-		unitScale = 1 / (float) getTileSize();
-		mapRenderer = new OrthogonalTiledMapRenderer(map, unitScale);
-		
-//		collisionManager = new Box2dWorldManager();
-
+		terrainLayer = (TiledMapTileLayer) map.getLayers().get(Constants.TERRAIN_LAYER_NAME);		
+		mapRenderer = new OrthogonalTiledMapRenderer(map, Constants.UNIT_SCALE);
 	}
 	
 	public void renderBgLayers(OrthographicCamera cam)
-	{
+	{		
 		mapRenderer.setView(cam);
 		mapRenderer.render(backgroundLayers);
 	}
@@ -241,10 +236,5 @@ public class TileMapManager {
 	public OrthogonalTiledMapRenderer getMapRenderer()
 	{
 		return mapRenderer;
-	}
-	
-	public float getScale()
-	{
-		return unitScale;
 	}
 }

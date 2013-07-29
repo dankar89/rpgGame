@@ -9,10 +9,10 @@ public class Main {
 		cfg.title = "my-gdx-game";
 		cfg.useGL20 = false;
 
-		cfg.width = 1024;
-//		cfg.width = 1920;
-		cfg.height = 768;
-//		cfg.height = 1080;
+//		cfg.width = 1024;
+		cfg.width = 1920;
+//		cfg.height = 768;
+		cfg.height = 1080;
 		cfg.vSyncEnabled = true;
 		cfg.useCPUSynch = false;			
 //		cfg.fullscreen = true;

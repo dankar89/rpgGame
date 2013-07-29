@@ -25,6 +25,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 public class MyGdxGame implements ApplicationListener {
 	private OrthographicCamera camera;
@@ -37,9 +38,9 @@ public class MyGdxGame implements ApplicationListener {
 	private Rectangle worldBounds;
 	private Rectangle camRect;
 	private int w, h;
-	private Player player;
+	private Player2 player;
 	private TileMapManager tileMapManager;
-	private Box2dManager worldManager;
+	private Physics physics;
 	private ShapeRenderer shapeRenderer;
 	private boolean debug = true;
 	private Input prevInput;
@@ -87,7 +88,10 @@ public class MyGdxGame implements ApplicationListener {
 		camera = new OrthographicCamera(
 				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
 				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
+		
 		camera.setToOrtho(false, w / tileMapManager.getTileSize(), h / tileMapManager.getTileSize());		
+//		camera.setToOrtho(false, (w/h) * 32, 20);
+		
 		camera.update();	
 		
 //		screenCamPos = camera.position;
@@ -95,12 +99,12 @@ public class MyGdxGame implements ApplicationListener {
 		camRect = new Rectangle((camera.position.x) - ((w / 32) / 2), (camera.position.y) - ((h / 32) / 2), w, h);
 		System.out.println(camRect);
 		//TEST
-		worldManager = new Box2dManager();
+		physics = new Physics();
 
 		//
 		
 		
-		player = new Player(tileMapManager.getPlayerStartPos(), tileMapManager.getScale(), worldManager.getWorld());
+		player = new Player2(new Vector2(tileMapManager.getPlayerStartPos().x, tileMapManager.getPlayerStartPos().y), physics.getWorld());
 		
 		ArrayList<CollisionData> colData = tileMapManager.getBox2dMapObjects("shape",
 				Constants.BACKGROUND_LAYER_INDEX,
@@ -116,7 +120,7 @@ public class MyGdxGame implements ApplicationListener {
 				System.out.println(cd);
 			}
 			
-			worldManager.createMapObjects(colData);
+			physics.createMapObjects(colData);
 		}
 		else
 		{
@@ -131,12 +135,12 @@ public class MyGdxGame implements ApplicationListener {
 		assetManager.dispose();		
 		shapeRenderer.dispose();
 		player.dispose();
-		worldManager.destroyBodies();
+		physics.destroyBodies();
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		if (assetManager.update()) {
@@ -182,13 +186,11 @@ public class MyGdxGame implements ApplicationListener {
 				font.draw(hudBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 40);
 				hudBatch.end();
 				
-//				debugRenderer.render(world, camera.combined);
-				worldManager.renderDebug(camera.combined);
+				physics.renderDebug(camera.combined);
 			}
 			
-//			world.step(1/60f,6, 2);
 			
-			worldManager.update(1/60f, camera);
+			physics.update(1/60f, camera);			
 		}
 	}
 
