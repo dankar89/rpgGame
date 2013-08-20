@@ -85,11 +85,12 @@ public class MyGdxGame implements ApplicationListener {
 		//remove maxCamPos and minCamPos!!!
 		worldBounds = new Rectangle(minCamPos.x, minCamPos.y, maxCamPos.x - minCamPos.x, maxCamPos.y - minCamPos.y);
 				
-		camera = new OrthographicCamera(
-				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
-				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
+//		camera = new OrthographicCamera(
+//				tileMapManager.getMapWidth() * tileMapManager.getTileSize(),
+//				tileMapManager.getMapHeight() * tileMapManager.getTileSize());
+		camera = new OrthographicCamera();
 		
-		camera.setToOrtho(false, w / tileMapManager.getTileSize(), h / tileMapManager.getTileSize());		
+		camera.setToOrtho(false, w / Constants.TILE_SIZE, h / Constants.TILE_SIZE);		
 //		camera.setToOrtho(false, (w/h) * 32, 20);
 		
 		camera.update();	
@@ -213,7 +214,7 @@ public class MyGdxGame implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
-        camera.setToOrtho(false, width / 32, height / 32);
+        camera.setToOrtho(false, width / Constants.TILE_SIZE, height / Constants.TILE_SIZE);
         camera.update();
 
         worldBatch.setProjectionMatrix(camera.combined);

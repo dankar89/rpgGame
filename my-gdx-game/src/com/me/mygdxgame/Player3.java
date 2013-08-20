@@ -91,7 +91,6 @@ public class Player3 {
 		animatedBox2dSprite.stop();
 		
 		Sprite sprite = new Sprite(idle_region);
-		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		box2dSprite = new Box2DSprite(sprite);
 		
 		
@@ -104,50 +103,28 @@ public class Player3 {
 		bodyDef.type = BodyType.DynamicBody;		
 		float bodyOffset = .5f;
 		Vector2 bodyPos = new Vector2(
-				(startPos.x / Constants.TILE_SIZE) + ((box2dSprite.getWidth() / 2) / Constants.PIXELS_PER_METER),
-				(startPos.y / Constants.TILE_SIZE) + ((box2dSprite.getHeight() / 2) / Constants.PIXELS_PER_METER));
+				(startPos.x / Constants.TILE_SIZE) + bodyOffset,
+				(startPos.y / Constants.TILE_SIZE) + bodyOffset);
 		bodyDef.position.set(bodyPos.x, bodyPos.y);		
 		
-		shape.setRadius((idle_region.getRegionWidth() / Constants.PIXELS_PER_METER) / 2);
-//		shape.setPosition(new Vector2(bodyOffset, bodyOffset));
-		
-		boxShape.setAsBox((idle_region.getRegionWidth() / 2f) / Constants.PIXELS_PER_METER, (idle_region.getRegionHeight() / 2f) / Constants.PIXELS_PER_METER);		
-//		fixtureDef.shape = shape;
+		shape.setRadius((idle_region.getRegionWidth() / Constants.PIXELS_PER_METER) / 2f);
+
+		boxShape.setAsBox((box2dSprite.getWidth() / 2.5f) / Constants.PIXELS_PER_METER, (box2dSprite.getHeight() / 4f) / Constants.PIXELS_PER_METER);		
 		
 		playerBody = world.createBody(bodyDef);
 		fixture = playerBody.createFixture(shape, 0);			
 		shape.dispose();
 		boxShape.dispose();
 		
-//		playerBody.setUserData(box2dSprite);
-				
-//		Sprite tmpSprite = new Sprite(region);
-//		tmpSprite.setOrigin(tmpSprite.getWidth() / 2, tmpSprite.getHeight() / 2);
-//		fixtureSprite = new FixtureSprite(tmpSprite);
-		
-//		float spriteOffset = 10;
-//		box2dSprite.setOrigin((idle_region.getRegionWidth() / Constants.PIXELS_PER_METER), (idle_region.getRegionHeight() / Constants.PIXELS_PER_METER));
-//		
-		
-//		animatedBox2dSprite.setAdjustWidth(false);
-//		animatedBox2dSprite.setAdjustHeight(false);	
-//		animatedBox2dSprite.setScale(1f / Constants.PIXELS_PER_METER);
-//		
-
-
-//		box2dSprite.setOrigin((idle_region.getRegionWidth() / Constants.PIXELS_PER_METER) , (idle_region.getRegionHeight() / Constants.PIXELS_PER_METER));
-//		System.out.println(playerBody.getPosition());
-//		System.out.println(animatedBox2dSprite.getX());
-//		fixture.setUserData(animatedBox2dSprite);
-//		box2dSprite.setAdjustWidth(false);
-//		box2dSprite.setAdjustHeight(false);
-//		box2dSprite.setUseOriginX(true);
-//		box2dSprite.setUseOriginY(true);		
-//		box2dSprite.setScale(1f / Constants.PIXELS_PER_METER);
+		box2dSprite.setAdjustWidth(false);
+		box2dSprite.setAdjustHeight(false);
+		box2dSprite.setUseOriginX(true);
+		box2dSprite.setUseOriginY(true);		
+		box2dSprite.setScale(1f / (float)Constants.PIXELS_PER_METER);
+		box2dSprite.setOrigin(0, 0);
 
 		
 		System.out.println("############# " + playerBody.getPosition());
-//		System.out.println("############# " + box2dSprite.getX());
 		
 		playerBody.setUserData(box2dSprite);
 //		fixture.setUserData(box2dSprite);

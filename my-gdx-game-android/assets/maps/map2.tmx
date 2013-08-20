@@ -116,12 +116,16 @@
   </tile>
   <tile id="463">
    <properties>
+    <property name="body" value="static"/>
+    <property name="shape" value="circle"/>
     <property name="walkable" value="false"/>
    </properties>
   </tile>
   <tile id="464">
    <properties>
-    <property name="walkable" value="false"/>
+    <property name="body" value="static"/>
+    <property name="shape" value=""/>
+    <property name="walkable" value="polygon"/>
    </properties>
   </tile>
   <tile id="486" terrain="4,4,4,6"/>
