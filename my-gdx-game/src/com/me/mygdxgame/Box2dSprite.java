@@ -23,35 +23,34 @@ public class Box2dSprite{
 	private Vector2 bodyPos = Vector2.Zero;
 	private float scale;
 	
-	public Box2dSprite(World world, Vector2 pos, Body body, Shape shape, boolean isActive)
+	public Box2dSprite(World world, Vector2 pos, Body body, boolean isActive)
 	{
 		this.sprite = new Sprite();
-		this.box2dObject = new Box2dObject(world, body, shape, isActive);	
+		this.box2dObject = new Box2dObject(world, body, isActive);	
 		this.startPos = pos;	
 	}
 	
-	public Box2dSprite(World world, TextureRegion textureRegion, Vector2 pos, Body body, Shape shape, boolean isActive)
+	public Box2dSprite(World world, TextureRegion textureRegion, Vector2 pos, Body body, boolean isActive)
 	{
-		init(world, textureRegion, pos, body, shape, isActive);
+		init(world, textureRegion, pos, body, isActive);
 	}
 	
-	public void init(World world, TextureRegion textureRegion, Vector2 pos, Body body, Shape shape, boolean isActive)
+	public void init(World world, TextureRegion textureRegion, Vector2 pos, Body body, boolean isActive)
 	{
 		this.sprite = new Sprite();
-		this.box2dObject = new Box2dObject(world, body, shape, isActive);
+		this.box2dObject = new Box2dObject(world, body, isActive);
 		
 		this.startPos = pos;	
 		
 		sprite.setRegion(textureRegion);
 		sprite.setBounds(startPos.x, startPos.y, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
 		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-		sprite.setScale(2.0f);
 	}
 
 	
 	public void update(float dt)
 	{		
-	
+//		sprite.setPosition(getBody().getPosition().x * Constants.BOX_TO_WORLD, getBody().getPosition().y * Constants.BOX_TO_WORLD);
 	}
 		
 	public void draw(SpriteBatch batch)
@@ -60,8 +59,8 @@ public class Box2dSprite{
 		batch.draw(sprite.getTexture(),
 				getWorldPosition().x,
 				getWorldPosition().y,
-//				body.getPosition().x,
-//				body.getPosition().y,
+//				getBody().getPosition().x * Constants.BOX_TO_WORLD,
+//				getBody().getPosition().y * Constants.BOX_TO_WORLD,
 				sprite.getWidth() / Constants.TILE_SIZE,
 				sprite.getHeight() / Constants.TILE_SIZE);
 	}
@@ -72,8 +71,8 @@ public class Box2dSprite{
 		batch.draw(region,
 				getWorldPosition().x,
 				getWorldPosition().y,
-//				body.getPosition().x,
-//				body.getPosition().y,
+//				getBody().getPosition().x * Constants.BOX_TO_WORLD,
+//				getBody().getPosition().y * Constants.BOX_TO_WORLD,
 				sprite.getWidth() / Constants.TILE_SIZE,
 				sprite.getHeight() / Constants.TILE_SIZE);
 	}
@@ -81,6 +80,11 @@ public class Box2dSprite{
 	public Sprite getSprite()
 	{
 		return this.sprite;
+	}
+	
+	public Body getBody()
+	{
+		return box2dObject.getBody();
 	}
 	
 	public Box2dObject getBox2dObject()
@@ -98,6 +102,27 @@ public class Box2dSprite{
 		worldCenterPos.x = Math.round(sprite.getX() + sprite.getOriginX()) / 32;
 		worldCenterPos.y = Math.round(sprite.getY() + sprite.getOriginY()) / 32;
 		return worldCenterPos;
+	}
+	
+	
+	public void translate(float xAmount, float yAmount)
+	{			
+		this.box2dObject.getBody().setLinearVelocity(xAmount * Constants.WORLD_TO_BOX,
+						yAmount * Constants.WORLD_TO_BOX);		
+//		this.sprite.setPosition(this.box2dObject.getPosition().x, this.box2dObject.getPosition().y);
+		
+	}
+	
+	public void setPosition(Vector2 v)
+	{
+//		this.sprite.setPosition(v.x, v.y);
+		this.box2dObject.setPosition(v.x * Constants.WORLD_TO_BOX, v.y * Constants.WORLD_TO_BOX);		
+	}
+	
+	public void setPosition(float x, float y)
+	{
+//		this.sprite.setPosition(x, y);
+		this.box2dObject.setPosition(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX);
 	}
 	
 	public Vector2 getStartPos()

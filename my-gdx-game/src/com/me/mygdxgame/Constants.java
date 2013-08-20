@@ -3,6 +3,7 @@ package com.me.mygdxgame;
 public final class Constants {
 	static final float WORLD_TO_BOX = 0.032f; //0.01
 	static final float BOX_TO_WORLD = 100f;
+	static final float PIXELS_PER_METER = 32;
 	
 	static final String TERRAIN_LAYER_NAME = "terrain";
 	static final int TERRAIN_LAYER_INDEX = 0;

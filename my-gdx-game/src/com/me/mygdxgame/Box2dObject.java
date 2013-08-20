@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Box2dObject {
 	private Body body;
 //	private BodyDef bodyDef;
-	private Shape shape;
 //	private Fixture fixture;
 	private boolean markedForDeletion;
 	private boolean isActive = true;
@@ -18,21 +17,20 @@ public class Box2dObject {
 	public Box2dObject()
 	{}
 	
-	public Box2dObject(World world, Body body, Shape shape, boolean isActive)
+	public Box2dObject(World world, Body body, boolean isActive)
 	{
-		init(world, body, shape, isActive);
+		init(world, body, isActive);
 	}
 	
 	public Box2dObject(World world, Body body, Shape shape)
 	{
-		init(world, body, shape, true);
+		init(world, body, true);
 	}
 	
-	public void init(World world, Body body, Shape shape, boolean isActive)
+	public void init(World world, Body body, boolean isActive)
 	{
 //		this.bodyDef = bodyDef;
-//		this.fixture = fixture;
-		this.shape = shape;		
+//		this.fixture = fixture;	
 		this.isActive = isActive;
 		this.markedForDeletion = false;
 		
@@ -59,6 +57,11 @@ public class Box2dObject {
 	public Vector2 getPosition()
 	{
 		return body.getPosition();
+	}
+	
+	public void setPosition(float x, float y)
+	{
+		this.body.getPosition().set(x, y);
 	}
 	
 	public Body getBody()

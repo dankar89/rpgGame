@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="com.badlogic.gdx.physics.box2d.Shape"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.math.Vector3"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.physics.box2d.Body"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.backends.android.surfaceview.ResolutionStrategy"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.backends.android.surfaceview.ResolutionStrategy.MeasuredDimension"/>
+<fullyQualifiedTypeName name="com.me.mygdxgame.Constants"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture.TextureFilter"/>
+<fullyQualifiedTypeName name="com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.maps.tiled.TmxMapLoader"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.SpriteBatch"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Color"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.physics.box2d.MassData"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.physics.box2d.BodyDef.BodyType"/>
+<fullyQualifiedTypeName name="com.me.mygdxgame.Box2dObject"/>
+<fullyQualifiedTypeName name="com.badlogic.gdx.math.Vector2"/>
 </qualifiedTypeNameHistroy>

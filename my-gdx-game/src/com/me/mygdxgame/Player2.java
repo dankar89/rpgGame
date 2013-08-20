@@ -76,9 +76,10 @@ public class Player2 {
 		standing_regions = walking_spriteSheet.findRegions("standing"); 		
 		TextureRegion region = standing_regions.get(1);		
 		region.getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		
 //		///BOX2d TEST STUFF
-		bodyDef = new BodyDef();		
-		bodyDef.type = BodyType.DynamicBody;
+		bodyDef = new BodyDef();				
 		
 		//add a small offset to the position to better match the sprite
 		float shapeOffset = 5.0f * Constants.WORLD_TO_BOX;
@@ -88,35 +89,25 @@ public class Player2 {
 				(startPos.x / Constants.TILE_SIZE) + ((Constants.TILE_SIZE / 2) * Constants.WORLD_TO_BOX),
 				(startPos.y / Constants.TILE_SIZE) + (((Constants.TILE_SIZE / 2) * Constants.WORLD_TO_BOX) - shapeOffset));
 		bodyDef.position.set(bodyPos.x, bodyPos.y);
-//		
-//		
+		bodyDef.type = BodyType.DynamicBody;
+		
 //		// Create our body in the world using our body definition
 		body = world.createBody(bodyDef);
 //
 //		// Create a circle shape and set its radius
 		circle = new CircleShape();
 		circle.setRadius(((region.getRegionWidth() / 2) * Constants.WORLD_TO_BOX) - (shapeOffset / 2));
-//
-		// Create a fixture definition to apply our shape to
-//		fixtureDef = new FixtureDef();
-//		fixtureDef.shape = circle;
-//		fixtureDef.density = 0.5f; 
-//		fixtureDef.friction = 0.6f;
-//		fixtureDef.restitution = 0.05f; // Make it bounce a little bit
-		
+
 //		// Create our fixture and attach it to the body
 		body.createFixture(circle, 0);			
+		circle.dispose();
 		
-//		
-//		body.setUserData(sprite);
+		body.setUserData((Box2dSprite)sprite);
 		body.setFixedRotation(true);
 		body.setLinearVelocity(Vector2.Zero);
-		body.setLinearDamping(5f);			
-//		////////////////////
+//		body.setLinearDamping(5f);					
 		
-		
-		this.sprite = Box2dSpriteFactory.createAnimatedBox2dSprite(world, region, startPos, body, (Shape)circle, true);
-		sprite.getSprite().setScale(Constants.UNIT_SCALE);
+		this.sprite = Box2dSpriteFactory.createAnimatedBox2dSprite(world, region, startPos, body, true);	
 		
 		walk_up_anim = new Animation(0.05f, walking_spriteSheet.findRegions(WALK_UP));
 		walk_down_anim = new Animation(0.05f, walking_spriteSheet.findRegions(WALK_DOWN));
@@ -127,25 +118,20 @@ public class Player2 {
 		this.sprite.addAnimation(WALK_DOWN, walk_down_anim);
 		this.sprite.addAnimation(WALK_LEFT, walk_left_anim);
 		this.sprite.addAnimation(WALK_RIGHT, walk_right_anim);
-		circle.dispose();
+		
 	}
 	
 	public void update(Rectangle worldBounds, float deltaTime) {		
 		sprite.update(deltaTime);
 
 		setCurrentAnimationFrame();
-		handleInput(worldBounds);			
+		handleInput(worldBounds);		
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {
 		
-		//the sprite should know which frame to draw!!!!
-		
-		sprite.draw(spriteBatch);/*,
-				getWorldPosition().x,
-				getWorldPosition().y,
-				sprite.getWidth() / Constants.TILE_SIZE,
-				sprite.getHeight() / Constants.TILE_SIZE);*/
+		//the sprite should know which frame to draw!!!!		
+		sprite.draw(spriteBatch);
 	}
 	
 	public void dispose()
@@ -194,11 +180,17 @@ public class Player2 {
 	
 	
 	private void handleInput(Rectangle worldBounds) {
+		
+		//oldPos
 		tmpPos.x = sprite.getSprite().getX();
 		tmpPos.y = sprite.getSprite().getY();
 		
-//		if (Gdx.input.isKeyPressed(Keys.SPACE))
-//			body.applyLinearImpulse(new Vector2(0.2f, 0.1f), body.getWorldCenter(), false);
+		if (Gdx.input.isKeyPressed(Keys.SPACE))
+		{
+			sprite.translate(15, 15);
+			sprite.getSprite().translate(15, 15);
+			System.out.println(sprite.getSprite().getX() + ":" + sprite.getSprite().getY());
+		}
 		
 		if(Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT))
 		{
@@ -209,9 +201,9 @@ public class Player2 {
 			isStrafing = false;			
 		}
 		
-		float movement = (Gdx.graphics.getDeltaTime() * speed) * Constants.WORLD_TO_BOX;
-		if (Gdx.input.isKeyPressed(Keys.UP)) {		
-//			body.applyLinearImpulse(new Vector2(0f, movement), body.getWorldCenter(), true);
+//		float movement = (Gdx.graphics.getDeltaTime() * speed) * Constants.WORLD_TO_BOX;
+//		Vector2 movement = new Vector2((Gdx.graphics.getDeltaTime() * speed) / Constants.BOX_TO_WORLD, 0);
+		if (Gdx.input.isKeyPressed(Keys.UP)) {					
 			tmpPos.y = sprite.getSprite().getY() + (Gdx.graphics.getDeltaTime() * speed);
 			
 			if(!isStrafing)
@@ -230,8 +222,9 @@ public class Player2 {
 			
 			if(!isStrafing)
 				state = State.WalkingLeft;
-		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {			
-//			body.applyLinearImpulse(new Vector2(movement, 0f), body.getWorldCenter(), true);
+		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {	
+			body.setLinearVelocity((Gdx.graphics.getDeltaTime() * speed) / Constants.WORLD_TO_BOX, 0);
+//			body.applyLinearImpulse(movement, body.getWorldCenter(), true);
 			tmpPos.x = sprite.getSprite().getX() + (Gdx.graphics.getDeltaTime() * speed);//
 //			body.setLinearVelocity(movement * 10, 0f);			
 			
@@ -240,7 +233,7 @@ public class Player2 {
 		}
 		else			
 		{
-			body.setLinearVelocity(0f, 0f);
+//			body.setLinearVelocity(0f, 0f);
 			if(!isStrafing)
 				state = State.Standing;
 		}
@@ -252,7 +245,8 @@ public class Player2 {
 				tmpPos.y = Math.round(sprite.getSprite().getY() + Gdx.input.getDeltaY());				
 			}
 		}
-				
+
+		
 		
 //		this.sprite = (Sprite)body.getUserData();
 //		sprite.setX(body.getPosition().x * Constants.BOX_TO_WORLD);

@@ -25,10 +25,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 public class MyGdxGame implements ApplicationListener {
 	private OrthographicCamera camera;
+	private Player3 playerTest;
 	private SpriteBatch worldBatch;
 	private SpriteBatch hudBatch;
 	public static AssetManager assetManager;
@@ -38,7 +38,7 @@ public class MyGdxGame implements ApplicationListener {
 	private Rectangle worldBounds;
 	private Rectangle camRect;
 	private int w, h;
-	private Player2 player;
+	private Player3 player;
 	private TileMapManager tileMapManager;
 	private Physics physics;
 	private ShapeRenderer shapeRenderer;
@@ -103,8 +103,9 @@ public class MyGdxGame implements ApplicationListener {
 
 		//
 		
-		
-		player = new Player2(new Vector2(tileMapManager.getPlayerStartPos().x, tileMapManager.getPlayerStartPos().y), physics.getWorld());
+		Vector2 startpos = new Vector2(tileMapManager.getPlayerStartPos().x, tileMapManager.getPlayerStartPos().y);
+//		Vector2 player1pos = new Vector2(startpos.x - 100, startpos.y - 100);
+//		player = new Player2(player1pos, physics.getWorld());
 		
 		ArrayList<CollisionData> colData = tileMapManager.getBox2dMapObjects("shape",
 				Constants.BACKGROUND_LAYER_INDEX,
@@ -126,6 +127,11 @@ public class MyGdxGame implements ApplicationListener {
 		{
 			System.out.println("no collision data found!");
 		}
+		
+		player = new Player3(physics.getWorld(), startpos);
+//		playerTest = new Player3(physics.getWorld(), new Vector2((w / 3) / Constants.PIXELS_PER_METER, (h/ 3) / Constants.PIXELS_PER_METER));
+//		playerTest.setPos(new Vector2((w / 2) / Constants.PIXELS_PER_METER, (h/ 2) / Constants.PIXELS_PER_METER));
+//		playerTest.setPos(startpos.x + 10, startpos.y + 10);
 	}
 
 	@Override
@@ -134,7 +140,6 @@ public class MyGdxGame implements ApplicationListener {
 		tileMapManager.dispose();
 		assetManager.dispose();		
 		shapeRenderer.dispose();
-		player.dispose();
 		physics.destroyBodies();
 	}
 
@@ -146,17 +151,20 @@ public class MyGdxGame implements ApplicationListener {
 		if (assetManager.update()) {
 			 handleInput();	
 
-			player.update(worldBounds, Gdx.graphics.getDeltaTime());
+//			player.update(worldBounds, Gdx.graphics.getDeltaTime());
+			player.update();
 			
-			setCameraPos(player.getWorldPosition().x, player.getWorldPosition().y);					
+			setCameraPos(player.getBody().getPosition().x, player.getBody().getPosition().y);					
 
 			camera.update();							
 			
 			tileMapManager.renderBgLayers(camera);
 
 			worldBatch.begin();			
-			player.draw(worldBatch);			
-			worldBatch.end();					
+			player.draw(worldBatch);
+//			playerTest.draw(worldBatch);
+			worldBatch.end();	
+			
 						
 			tileMapManager.renderFgLayers(camera);				
 			
@@ -174,11 +182,19 @@ public class MyGdxGame implements ApplicationListener {
 //				shapeRenderer.setColor(new Color(255,0,0,100));								
 //				
 				//draw player bounding rect
-				shapeRenderer.rect(
-						player.getWorldPosition().x, 
-						player.getWorldPosition().y, 
-						player.getSprite().getBoundingRectangle().width / tileMapManager.getTileSize(), 
-						player.getSprite().getBoundingRectangle().height / tileMapManager.getTileSize());								
+//				shapeRenderer.rect(
+//						player.getWorldPosition().x, 
+//						player.getWorldPosition().y, 
+//						player.getSprite().getBoundingRectangle().width / tileMapManager.getTileSize(), 
+//						player.getSprite().getBoundingRectangle().height / tileMapManager.getTileSize());			
+				
+//				//draw player bounding rect
+//				shapeRenderer.rect(
+//						player.getBody().getPosition().x - ((player.getSprite().getWidth() / tileMapManager.getTileSize()) / 2), 
+//						player.getBody().getPosition().y - ((player.getSprite().getHeight() / tileMapManager.getTileSize()) / 2),
+//						player.getSprite().getWidth() / tileMapManager.getTileSize(), 
+//						player.getSprite().getHeight() / tileMapManager.getTileSize());								
+			
 			
 				shapeRenderer.end();
 				
@@ -186,6 +202,7 @@ public class MyGdxGame implements ApplicationListener {
 				font.draw(hudBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 40);
 				hudBatch.end();
 				
+//				physics.renderDebug(camera.combined.cpy().scl(1f/Constants.WORLD_TO_BOX));
 				physics.renderDebug(camera.combined);
 			}
 			
@@ -196,6 +213,10 @@ public class MyGdxGame implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
+        camera.setToOrtho(false, width / 32, height / 32);
+        camera.update();
+
+        worldBatch.setProjectionMatrix(camera.combined);
 	}
 
 	@Override

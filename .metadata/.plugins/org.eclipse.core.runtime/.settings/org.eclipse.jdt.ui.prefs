@@ -6,11 +6,12 @@ content_assist_autoactivation_triggers_javadoc=@\#
 content_assist_autoinsert=true
 content_assist_case_sensitivity=false
 content_assist_category_order=org.eclipse.jdt.ui.spellingProposalCategory\:65545\u0000org.eclipse.jdt.ui.javaTypeProposalCategory\:65540\u0000org.eclipse.jdt.ui.javaNoTypeProposalCategory\:65539\u0000org.eclipse.jdt.ui.textProposalCategory\:65541\u0000org.eclipse.jdt.ui.javaAllProposalCategory\:65542\u0000org.eclipse.jdt.ui.templateProposalCategory\:2\u0000org.eclipse.jdt.ui.swtProposalCategory\:3\u0000
-content_assist_disabled_computers=org.eclipse.jdt.ui.javaNoTypeProposalCategory\u0000org.eclipse.jdt.ui.textProposalCategory\u0000
+content_assist_disabled_computers=org.eclipse.jdt.ui.javaNoTypeProposalCategory\u0000org.eclipse.jdt.ui.textProposalCategory\u0000org.eclipse.jdt.ui.javaTypeProposalCategory\u0000
 content_assist_favorite_static_members=
 content_assist_fill_method_arguments=true
 content_assist_guess_method_arguments=false
 content_assist_insert_completion=true
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="java.util.Map"><rhs name\="java.util.HashMap"/></lhs><lhs name\="java.lang.Enum"><rhs name\="com.badlogic.gdx.graphics.Texture$TextureFilter"/></lhs><lhs name\="com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader"><rhs name\="com.badlogic.gdx.maps.tiled.TmxMapLoader"/></lhs><lhs name\="com.badlogic.gdx.assets.loaders.AssetLoader"><rhs name\="com.badlogic.gdx.maps.tiled.TmxMapLoader"/></lhs><lhs name\="com.badlogic.gdx.maps.tiled.TmxMapLoader"><rhs name\="com.badlogic.gdx.maps.tiled.TmxMapLoader"/></lhs><lhs name\="com.badlogic.gdx.graphics.Color"><rhs name\="com.badlogic.gdx.graphics.Color"/></lhs><lhs name\="com.badlogic.gdx.math.Vector"><rhs name\="com.badlogic.gdx.math.Vector2"/></lhs><lhs name\="com.badlogic.gdx.math.Vector2"><rhs name\="com.badlogic.gdx.math.Vector2"/></lhs></history>
 content_assist_number_of_computers=13
 content_assist_prefix_completion=false
 content_assist_proposals_background=255,255,255

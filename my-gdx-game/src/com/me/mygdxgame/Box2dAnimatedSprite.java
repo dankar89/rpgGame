@@ -57,15 +57,15 @@ public class Box2dAnimatedSprite extends Box2dSprite{
 
 	private boolean isStrafing = false;
 	
-	public Box2dAnimatedSprite(World world, TextureRegion textureRegion, Vector2 pos, Body body,
-			Shape shape, boolean isActive) {
-		super(world, textureRegion, pos, body, shape, isActive);
+	public Box2dAnimatedSprite(World world, TextureRegion textureRegion, Vector2 pos, Body body, boolean isActive) {
+		super(world, textureRegion, pos, body, isActive);
 		
 		
 	}
 	
 	public void update(float dt)
 	{
+		super.update(dt);
 		stateTime += dt; 
 	}
 	

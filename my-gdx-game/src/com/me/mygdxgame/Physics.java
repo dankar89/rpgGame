@@ -146,7 +146,7 @@ public class Physics {
 	
 	public void update(float timeStep, OrthographicCamera cam)
 	{
-		System.out.println(world.getBodyCount());
+//		System.out.println(world.getBodyCount());
 		if(world.getBodyCount() > 1) //TODO add check for player body 
 		{
 			bodies = world.getBodies();	
@@ -170,7 +170,7 @@ public class Physics {
 			
 		}
 	
-		world.step(1/60f,6, 2);
+		world.step(timeStep, 6, 2);
 				
 		//destroy bodies marked for deletion
 		for (Body body : deletionList) {
